@@ -627,11 +627,6 @@ html, body {
   gap: 8px;
 }
 
-.event-step-card.highlight {
-  border: 1px solid var(--kv-red);
-  background: rgba(255, 30, 30, 0.08);
-}
-
 .step-header {
   display: flex;
   align-items: center;
@@ -645,11 +640,6 @@ html, body {
   color: #000000;
   padding: 2px 6px;
   border-radius: 2px;
-}
-
-.event-step-card.highlight .step-num {
-  background: var(--kv-red);
-  color: #FFFFFF;
 }
 
 .step-title {
@@ -713,7 +703,7 @@ html, body {
   padding: 16px 18px;
   border-radius: 2px;
   background: #FFFFFF;
-  border: 2px solid #FFFFFF;
+  border: 1px solid #FFFFFF;
   color: #000000;
   font-size: 13px;
   font-weight: 900;
@@ -724,23 +714,12 @@ html, body {
   gap: 10px;
   cursor: pointer;
   transition: all 0.15s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.primary-btn::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 6px;
-  background: var(--kv-red);
 }
 
 .primary-btn:active {
-  background: var(--kv-green);
-  border-color: var(--kv-green);
+  background: #000000;
+  color: #FFFFFF;
+  border-color: var(--border-white);
   transform: scale(0.98);
 }
 
