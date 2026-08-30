@@ -5,7 +5,7 @@
 window.APP_CONFIG = {
   // 🎓 졸업전시 기본 정보
   exhibition: {
-    title: "KONKUK UNIV. INDUSTRIAL DESIGN // 2026 DEGREE SHOW",
+    title: "2026 KUID GRADUATION SHOW // STANDBY",
     department: "건국대학교 산업디자인학과",
     theme: "STANDBY // CALIBRATION ARCHIVE",
     instagramId: "@kuid_graduation",
@@ -22,7 +22,7 @@ window.APP_CONFIG = {
     { id: "e", title: "과제 시작 전 STANDBY", tag: "MISSION E" }
   ],
 
-  // 🖼️ 프레임 설정: 공식 키비주얼 정지 이미지(PNG) 단일 적용
+  // 🖼️ 프레임 설정: 사용자가 전달한 공식 키비주얼 단일 적용
   frames: [
     {
       id: "kuid_standby_kv",

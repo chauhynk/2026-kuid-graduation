@@ -1,7 +1,5 @@
 /**
- * FilterRenderer Module - 비디오 및 PNG 프레임 실시간 캔버스 합성 엔진
- * - 단일 공식 키비주얼(PNG) 고화질 실시간 렌더링
- * - 사진(PHOTO) 캡처 & 영상(VIDEO) 녹화 지원
+ * FilterRenderer Module - 비디오 및 PNG/SVG 프레임 실시간 캔버스 합성 엔진 (사진 & 영상 녹화 지원)
  */
 class FilterRenderer {
   constructor(canvasElement, videoElement, config) {
@@ -42,7 +40,7 @@ class FilterRenderer {
   }
 
   /**
-   * config.js에 등록된 모든 PNG 프레임 에셋 사전 로드
+   * config.js에 등록된 모든 PNG/SVG 프레임 에셋 사전 로드
    */
   async preloadFrames() {
     const promises = this.config.frames.map(frame => {
@@ -125,7 +123,7 @@ class FilterRenderer {
   }
 
   /**
-   * 1프레임 렌더링 (카메라/사진 + 공식 PNG 키비주얼 오버레이)
+   * 1프레임 렌더링 (비디오 or 업로드 사진 + 색감 필터 + PNG/SVG 프레임 오버레이)
    */
   render() {
     const ctx = this.ctx;
@@ -182,7 +180,7 @@ class FilterRenderer {
       ctx.fillRect(0, 0, cw, ch);
     }
 
-    // 2. 키비주얼 프레임 오버레이 렌더링
+    // 2. 선택된 PNG/SVG 키비주얼 프레임 오버레이 렌더링
     const frameImg = this.frameImages.get(this.currentFrameId);
     if (frameImg && frameImg.complete && frameImg.naturalWidth > 0) {
       ctx.drawImage(frameImg, 0, 0, cw, ch);
@@ -192,7 +190,7 @@ class FilterRenderer {
   }
 
   /**
-   * 고화질 스냅샷 사진 캡처
+   * 고화질 스냅샷 사진 캡처 (Blob 및 DataURL 생성)
    */
   async captureSnapshot() {
     this.render();
@@ -208,18 +206,24 @@ class FilterRenderer {
   /**
    * 실시간 비디오(영상) 녹화 시작
    */
-  startVideoRecording() {
+  startVideoRecording(audioStream = null) {
     if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
       return;
     }
 
     const stream = this.canvas.captureStream(30);
+    if (audioStream) {
+      const audioTracks = audioStream.getAudioTracks();
+      if (audioTracks.length > 0) {
+        stream.addTrack(audioTracks[0]);
+      }
+    }
 
     const candidates = [
-      'video/mp4;codecs=avc1',
+      'video/mp4;codecs=avc1,mp4a.40.2',
       'video/mp4',
-      'video/webm;codecs=vp9',
-      'video/webm;codecs=vp8',
+      'video/webm;codecs=vp9,opus',
+      'video/webm;codecs=vp8,opus',
       'video/webm'
     ];
 

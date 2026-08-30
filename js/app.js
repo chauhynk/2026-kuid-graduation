@@ -1,7 +1,7 @@
 /**
  * Main Application - 건국대학교 산업디자인학과 졸업전시 STANDBY 웹 필터 앱
- * - TV 테스트 패턴 깜빡임 애니메이션 & "WERE EXPERIENCING TECHNICAL DIFFICULTIES..." 음향 연동
- * - 사진(PHOTO) & 사운드 포함 영상(VIDEO) 녹화 지원
+ * - 사진(PHOTO) 및 영상(VIDEO) 녹화 지원
+ * - 비네팅 제거 & 클린 모바일 뷰
  */
 document.addEventListener('DOMContentLoaded', async () => {
   const config = window.APP_CONFIG;
@@ -19,8 +19,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const flipBtn = document.getElementById('flip-camera-btn');
   const timerBtn = document.getElementById('timer-btn');
   const timerStatus = document.getElementById('timer-status');
-  const soundBtn = document.getElementById('sound-btn');
-  const soundStatus = document.getElementById('sound-status');
   const galleryInput = document.getElementById('gallery-input');
   const galleryBtn = document.getElementById('gallery-btn');
   const eventInfoBtn = document.getElementById('event-info-btn');
@@ -53,7 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const camera = new CameraController(video);
   const renderer = new FilterRenderer(canvas, video, config);
   const share = new ShareManager(config);
-  const audio = new AudioManager(config.audio?.src || 'assets/audio/standby_bgm.mp3');
 
   // 상태 변수
   let currentMode = 'photo'; // 'photo' or 'video'
@@ -136,31 +133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 2400);
   };
 
-  // 4. BGM 자동 재생 (사용자 첫 화면 터치 시 브라우저 정책 통과)
-  const startAudioOnFirstInteraction = () => {
-    audio.play();
-    document.removeEventListener('pointerdown', startAudioOnFirstInteraction);
-  };
-  document.addEventListener('pointerdown', startAudioOnFirstInteraction);
-
-  // 사운드 토글 버튼 (존재할 경우에만 연결)
-  if (soundBtn) {
-    soundBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isPlaying = audio.toggle();
-      if (isPlaying) {
-        if (soundStatus) soundStatus.textContent = 'ON';
-        soundBtn.classList.remove('active');
-        showToast('BGM ON // PLAYING');
-      } else {
-        if (soundStatus) soundStatus.textContent = 'OFF';
-        soundBtn.classList.add('active');
-        showToast('BGM OFF // MUTED');
-      }
-    });
-  }
-
-  // 5. 모드 전환 (PHOTO / VIDEO)
+  // 4. 모드 전환 (PHOTO / VIDEO)
   const setMode = (mode) => {
     if (isRecording) {
       stopVideoRecord();
@@ -181,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   modePhotoBtn.addEventListener('click', () => setMode('photo'));
   modeVideoBtn.addEventListener('click', () => setMode('video'));
 
-  // 6. 프레임 설정 및 초기화
+  // 5. 프레임 설정 및 초기화
   const initFrames = () => {
     if (!config.frames || config.frames.length <= 1) {
       if (frameSelectorWrapper) {
@@ -214,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   };
 
-  // 7. 카메라 초기화 및 시작
+  // 6. 카메라 초기화 및 시작
   try {
     await camera.startCamera('user');
     renderer.start(camera.isFrontCamera());
@@ -227,7 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initFrames();
   hashtagText.textContent = config.exhibition.hashtags.join(' ');
 
-  // 8. 카메라 전/후면 전환 버튼
+  // 7. 카메라 전/후면 전환 버튼
   flipBtn.addEventListener('click', async () => {
     try {
       flipBtn.style.opacity = '0.5';
@@ -240,7 +213,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 9. 타이머 버튼 토글 (OFF -> 3S -> 5S -> OFF)
+  // 8. 타이머 버튼 토글 (OFF -> 3S -> 5S -> OFF)
   timerBtn.addEventListener('click', () => {
     if (currentTimerSeconds === 0) {
       currentTimerSeconds = 3;
@@ -257,7 +230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 10. 갤러리 파일 선택 (사진 또는 영상)
+  // 9. 갤러리 파일 선택 (사진 또는 영상)
   galleryBtn.addEventListener('click', () => {
     galleryInput.click();
   });
@@ -292,7 +265,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 11. 화면 터치 초점 링 애니메이션
+  // 10. 화면 터치 초점 링 애니메이션
   canvas.addEventListener('pointerdown', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -307,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 800);
   });
 
-  // 12. 사진 촬영 로직
+  // 11. 사진 촬영 로직
   const executePhotoCapture = async () => {
     flashEl.classList.add('active');
     playSound('shutter');
@@ -338,7 +311,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     isCapturing = false;
   };
 
-  // 13. 영상 녹화 시작 로직 (BGM 사운드 트랙 자동 합성)
+  // 12. 영상 녹화 시작 로직
   const startVideoRecord = () => {
     if (isRecording) return;
     isRecording = true;
@@ -347,9 +320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     playSound('beep');
     triggerHaptic();
 
-    // BGM 오디오 트랙을 비디오 레코더에 전달하여 사운드 동시 녹음
-    const audioTrack = audio.getAudioTrack();
-    renderer.startVideoRecording(audioTrack);
+    renderer.startVideoRecording();
 
     // UI 상태 갱신
     shutterBtn.classList.add('recording');
@@ -367,7 +338,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 1000);
   };
 
-  // 14. 영상 녹화 종료 로직
+  // 13. 영상 녹화 종료 로직
   const stopVideoRecord = async () => {
     if (!isRecording) return;
     isRecording = false;
@@ -405,7 +376,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     resultModal.classList.add('active');
   };
 
-  // 15. 셔터 버튼 클릭 이벤트
+  // 14. 셔터 버튼 클릭 이벤트
   shutterBtn.addEventListener('click', async () => {
     if (currentMode === 'video') {
       if (!isRecording) {
@@ -440,7 +411,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 16. 인스타그램 스타일 길게 누르면 영상 녹화 (Hold to Record)
+  // 15. 인스타그램 스타일 길게 누르면 영상 녹화 (Hold to Record)
   let holdTimer = null;
   let isHoldRecording = false;
 
@@ -467,7 +438,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   shutterBtn.addEventListener('pointerup', handlePointerUp);
   shutterBtn.addEventListener('pointercancel', handlePointerUp);
 
-  // 17. 결과 모달 공유 & 다운로드 버튼
+  // 16. 결과 모달 공유 & 다운로드 버튼
   btnShareStory.addEventListener('click', async () => {
     if (lastResultType === 'photo' && lastCapturedBlob) {
       const res = await share.shareImage(lastCapturedBlob, `kuid_standby_${Date.now()}.jpg`);
@@ -510,7 +481,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 18. 이벤트 안내 모달
+  // 17. 이벤트 안내 모달
   const openEventModal = () => {
     eventModal.classList.add('active');
   };
