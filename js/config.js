@@ -5,7 +5,7 @@
 window.APP_CONFIG = {
   // 🎓 졸업전시 기본 정보
   exhibition: {
-    title: "KONKUK UNIV. INDUSTRIAL DESIGN // 2026 DEGREE SHOW",
+    title: "2026 KUID GRADUATION SHOW // STANDBY",
     department: "건국대학교 산업디자인학과",
     theme: "STANDBY // CALIBRATION ARCHIVE",
     instagramId: "@kuid_graduation",
@@ -22,24 +22,17 @@ window.APP_CONFIG = {
     { id: "e", title: "과제 시작 전 STANDBY", tag: "MISSION E" }
   ],
 
-  // 🖼️ 프레임 설정: TV 테스트 패턴 깜빡임 애니메이션 KUID S 키비주얼 적용
+  // 🖼️ 프레임 설정: 공식 키비주얼 정지 이미지(PNG) 단일 적용
   frames: [
     {
-      id: "kuid_s_tv",
-      name: "STANDBY TV",
+      id: "kuid_standby_kv",
+      name: "STANDBY KV",
       code: "01",
-      src: "assets/frames/kuid_s_tv_animated.svg",
-      description: "TV 테스트 패턴 깜빡임 & 캘리브레이션 KUID S 키비주얼",
-      colorEffect: "none",
-      isAnimated: true
+      src: "assets/frames/kuid_standby_frame.png",
+      description: "KUID STANDBY OFFICIAL KEY VISUAL",
+      colorEffect: "none"
     }
   ],
-
-  // 🎵 배경 음향 설정
-  audio: {
-    src: "assets/audio/standby_bgm.mp3",
-    title: "WERE EXPERIENCING TECHNICAL DIFFICULTIES... PLEASE STAND BY"
-  },
 
   // ⚙️ 기본 설정
   defaultRatio: "9:16",

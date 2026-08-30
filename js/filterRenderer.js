@@ -1,7 +1,7 @@
 /**
- * FilterRenderer Module - 비디오 및 PNG/SVG 프레임 실시간 캔버스 합성 엔진
- * - TV 테스트 패턴 깜빡임 & 캘리브레이션 펄스 이펙트 지원
- * - 사진 & 사운드 포함 영상 녹화 지원
+ * FilterRenderer Module - 비디오 및 PNG 프레임 실시간 캔버스 합성 엔진
+ * - 단일 공식 키비주얼(PNG) 고화질 실시간 렌더링
+ * - 사진(PHOTO) 캡처 & 영상(VIDEO) 녹화 지원
  */
 class FilterRenderer {
   constructor(canvasElement, videoElement, config) {
@@ -18,7 +18,6 @@ class FilterRenderer {
     this.isFrontCamera = true;
     this.animationFrameId = null;
     this.isRunning = false;
-    this.startTime = performance.now();
 
     // 영상 녹화 관련
     this.mediaRecorder = null;
@@ -43,7 +42,7 @@ class FilterRenderer {
   }
 
   /**
-   * config.js에 등록된 모든 PNG/SVG 프레임 에셋 사전 로드
+   * config.js에 등록된 모든 PNG 프레임 에셋 사전 로드
    */
   async preloadFrames() {
     const promises = this.config.frames.map(frame => {
@@ -126,13 +125,12 @@ class FilterRenderer {
   }
 
   /**
-   * 1프레임 렌더링 (카메라/사진 + TV 테스트 패턴 깜빡임 + 오버레이)
+   * 1프레임 렌더링 (카메라/사진 + 공식 PNG 키비주얼 오버레이)
    */
   render() {
     const ctx = this.ctx;
     const cw = this.canvas.width;
     const ch = this.canvas.height;
-    const now = performance.now() - this.startTime;
 
     ctx.save();
     ctx.clearRect(0, 0, cw, ch);
@@ -187,36 +185,9 @@ class FilterRenderer {
     // 2. 키비주얼 프레임 오버레이 렌더링
     const frameImg = this.frameImages.get(this.currentFrameId);
     if (frameImg && frameImg.complete && frameImg.naturalWidth > 0) {
-      ctx.save();
-      // TV CRT 미세 반짝임 (Flicker)
-      const flicker = 0.96 + Math.sin(now * 0.015) * 0.04;
-      ctx.globalAlpha = flicker;
       ctx.drawImage(frameImg, 0, 0, cw, ch);
-      ctx.restore();
     }
 
-    // 3. 실시간 TV 테스트 패턴 캘리브레이션 빔 효과
-    ctx.save();
-    const scanY = ((now * 0.2) % (ch + 100)) - 50;
-    
-    // 수평 캘리브레이션 스캔 빔
-    const gradient = ctx.createLinearGradient(0, scanY - 25, 0, scanY + 25);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.08)');
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, scanY - 25, cw, 50);
-
-    // 미세 글리치 스파크 (주기적 깜빡임)
-    if (Math.sin(now * 0.008) > 0.94) {
-      ctx.fillStyle = 'rgba(255, 30, 30, 0.04)';
-      ctx.fillRect(0, 0, cw, ch);
-    } else if (Math.sin(now * 0.007 + 1) > 0.95) {
-      ctx.fillStyle = 'rgba(0, 255, 42, 0.04)';
-      ctx.fillRect(0, 0, cw, ch);
-    }
-
-    ctx.restore();
     ctx.restore();
   }
 
@@ -235,25 +206,20 @@ class FilterRenderer {
   }
 
   /**
-   * 실시간 비디오(영상) 녹화 시작 (사운드 믹싱 포함)
+   * 실시간 비디오(영상) 녹화 시작
    */
-  startVideoRecording(customAudioTrack = null) {
+  startVideoRecording() {
     if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
       return;
     }
 
     const stream = this.canvas.captureStream(30);
 
-    // 전달받은 BGM 오디오 트랙을 비디오 스트림에 합성
-    if (customAudioTrack) {
-      stream.addTrack(customAudioTrack);
-    }
-
     const candidates = [
-      'video/mp4;codecs=avc1,mp4a.40.2',
+      'video/mp4;codecs=avc1',
       'video/mp4',
-      'video/webm;codecs=vp9,opus',
-      'video/webm;codecs=vp8,opus',
+      'video/webm;codecs=vp9',
+      'video/webm;codecs=vp8',
       'video/webm'
     ];
 

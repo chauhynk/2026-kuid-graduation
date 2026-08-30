@@ -143,20 +143,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   document.addEventListener('pointerdown', startAudioOnFirstInteraction);
 
-  // 사운드 토글 버튼 (원클릭 즉시 재생 및 정지)
-  soundBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isPlaying = audio.toggle();
-    if (isPlaying) {
-      soundStatus.textContent = 'ON';
-      soundBtn.classList.remove('active');
-      showToast('BGM ON // PLAYING');
-    } else {
-      soundStatus.textContent = 'OFF';
-      soundBtn.classList.add('active');
-      showToast('BGM OFF // MUTED');
-    }
-  });
+  // 사운드 토글 버튼 (존재할 경우에만 연결)
+  if (soundBtn) {
+    soundBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isPlaying = audio.toggle();
+      if (isPlaying) {
+        if (soundStatus) soundStatus.textContent = 'ON';
+        soundBtn.classList.remove('active');
+        showToast('BGM ON // PLAYING');
+      } else {
+        if (soundStatus) soundStatus.textContent = 'OFF';
+        soundBtn.classList.add('active');
+        showToast('BGM OFF // MUTED');
+      }
+    });
+  }
 
   // 5. 모드 전환 (PHOTO / VIDEO)
   const setMode = (mode) => {
