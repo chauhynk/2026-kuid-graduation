@@ -1,8 +1,8 @@
 /* ==========================================================================
    건국대학교 산업디자인학과 2026 졸업전시 (KUID STANDBY) 스타일시트
-   - 폰트: Noto Sans KR & Noto Sans 통일 적용
-   - 이모지 완전 배제, 스위스 그래픽 & 테크니컬 브루탈리즘 타이포그래피
-   - 모바일 풀스크린 최적화 (100dvh)
+   - 폰트: Noto Sans KR & Noto Sans
+   - 비네팅(그라데이션 어두움) 완전 제거 (투명 클린 뷰)
+   - 사진(PHOTO) & 동영상(VIDEO) 녹화 지원
    - 시그니처 컬러: 순백(#FFF), 흑색(#000), 키비주얼 레드(#FF1E1E), 네온 그린(#00FF2A)
    ========================================================================== */
 
@@ -21,7 +21,6 @@
   --border-subtle: rgba(255, 255, 255, 0.2);
   --border-dashed: 2px dashed rgba(255, 255, 255, 0.4);
   
-  /* ⭐️ 모든 폰트를 Noto Sans로 통일 */
   --font-sans: 'Noto Sans KR', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Noto Sans KR', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   
@@ -146,7 +145,7 @@ html, body {
 }
 
 /* ==========================================================================
-   2. 상단 브루탈리스트 테크니컬 탑 바 (Top Bar)
+   2. 상단 탑 바 (비네팅 제거 - 투명 배경)
    ========================================================================== */
 .top-bar {
   position: absolute;
@@ -158,14 +157,14 @@ html, body {
   justify-content: space-between;
   align-items: center;
   z-index: 30;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+  background: transparent; /* 비네팅 그라데이션 제거 */
 }
 
 .brand-badge {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-white);
@@ -216,18 +215,52 @@ html, body {
   100% { transform: rotate(360deg); }
 }
 
+/* 영상 녹화 시간 표시 인디케이터 */
+.record-indicator {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--kv-red);
+  padding: 6px 12px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #FFFFFF;
+}
+
+.record-indicator.active {
+  display: flex;
+}
+
+.rec-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--kv-red);
+  border-radius: 50%;
+  animation: pulseRec 1s infinite;
+}
+
+@keyframes pulseRec {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
 .top-controls {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* 텍스트 기반 테크니컬 버튼 */
 .tech-text-btn {
   height: 36px;
   padding: 0 12px;
   border-radius: 2px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-white);
@@ -294,7 +327,7 @@ html, body {
 }
 
 /* ==========================================================================
-   4. 하단 컨트롤 영역 (키비주얼 캐러셀 & 셔터)
+   4. 하단 컨트롤 영역 (비네팅 제거 - 투명 배경)
    ========================================================================== */
 .bottom-bar {
   position: absolute;
@@ -306,8 +339,8 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 65%, transparent 100%);
+  gap: 12px;
+  background: transparent; /* 비네팅 그라데이션 제거 */
 }
 
 .frame-selector-wrapper {
@@ -331,77 +364,47 @@ html, body {
   display: none;
 }
 
-.frame-card {
-  flex: 0 0 auto;
+/* 사진 / 영상 모드 스위처 */
+.mode-switcher {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 18px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
   cursor: pointer;
-  opacity: 0.5;
-  transform: scale(0.92);
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.frame-card.active {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-.frame-thumb {
-  width: 58px;
-  height: 58px;
-  border-radius: 4px;
-  background: rgba(14, 14, 18, 0.9);
-  backdrop-filter: blur(10px);
-  border: 1.5px dashed rgba(255, 255, 255, 0.35);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 3px 6px;
   position: relative;
-  overflow: hidden;
   transition: all 0.2s ease;
 }
 
-.frame-code {
-  font-size: 16px;
-  font-weight: 900;
+.mode-btn.active {
   color: #FFFFFF;
 }
 
-.frame-card.active .frame-thumb {
-  border: 2px solid #FFFFFF;
-  background: #000000;
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
-}
-
-.frame-card.active .frame-thumb::after {
+.mode-btn.active::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  background: var(--kv-red);
-}
-
-.frame-card.active .frame-thumb::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  background: var(--kv-green);
-}
-
-.frame-title {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text-white);
-  letter-spacing: -0.2px;
-  white-space: nowrap;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #FFFFFF;
 }
 
 /* 액션 컨트롤 (UPLOAD / SHUTTER / GUIDE) */
@@ -418,7 +421,7 @@ html, body {
   width: 68px;
   height: 44px;
   border-radius: 2px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-white);
   display: flex;
@@ -480,6 +483,23 @@ html, body {
 .shutter-btn:active .shutter-inner {
   transform: scale(0.88);
   background: #E5E5E5;
+}
+
+/* 영상 녹화 중 셔터 상태 */
+.shutter-btn.recording {
+  border-color: var(--kv-red);
+}
+
+.shutter-btn.recording .shutter-inner {
+  background: var(--kv-red);
+  border-color: #FFFFFF;
+  border-radius: 8px; /* 녹화 중 네모 정지 버튼 형태 */
+  transform: scale(0.75);
+}
+
+.shutter-btn.recording .shutter-label {
+  color: #FFFFFF;
+  font-size: 11px;
 }
 
 /* ==========================================================================

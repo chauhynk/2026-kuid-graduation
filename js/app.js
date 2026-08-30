@@ -1,5 +1,7 @@
 /**
  * Main Application - 건국대학교 산업디자인학과 졸업전시 STANDBY 웹 필터 앱
+ * - 사진(PHOTO) 및 영상(VIDEO) 녹화 지원
+ * - 비네팅 제거 & 클린 모바일 뷰
  */
 document.addEventListener('DOMContentLoaded', async () => {
   const config = window.APP_CONFIG;
@@ -14,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const frameSelectorWrapper = document.querySelector('.frame-selector-wrapper');
   const frameCarousel = document.getElementById('frame-carousel');
   const shutterBtn = document.getElementById('shutter-btn');
+  const shutterLabel = document.getElementById('shutter-label');
   const flipBtn = document.getElementById('flip-camera-btn');
   const timerBtn = document.getElementById('timer-btn');
   const timerStatus = document.getElementById('timer-status');
@@ -22,11 +25,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   const eventInfoBtn = document.getElementById('event-info-btn');
   const brandBadge = document.getElementById('brand-badge');
 
+  // 모드 전환 및 녹화 인디케이터
+  const modePhotoBtn = document.getElementById('mode-photo-btn');
+  const modeVideoBtn = document.getElementById('mode-video-btn');
+  const recordIndicator = document.getElementById('record-indicator');
+  const recordTimer = document.getElementById('record-timer');
+
   // 모달 요소들
   const resultModal = document.getElementById('result-modal');
+  const resultTitle = document.getElementById('result-title');
   const previewImg = document.getElementById('preview-img');
+  const previewVideo = document.getElementById('preview-video');
   const btnShareStory = document.getElementById('btn-share-story');
+  const btnShareText = document.getElementById('btn-share-text');
   const btnDownload = document.getElementById('btn-download');
+  const btnDownloadText = document.getElementById('btn-download-text');
   const btnRetake = document.getElementById('btn-retake');
   const btnCopyHashtags = document.getElementById('btn-copy-hashtags');
   const hashtagText = document.getElementById('hashtag-display');
@@ -41,42 +54,65 @@ document.addEventListener('DOMContentLoaded', async () => {
   const share = new ShareManager(config);
 
   // 상태 변수
+  let currentMode = 'photo'; // 'photo' or 'video'
   let currentTimerSeconds = 0; // 0, 3, 5
   let isCapturing = false;
+  let isRecording = false;
+  let recordingSeconds = 0;
+  let recordingInterval = null;
+  const MAX_RECORD_SECONDS = 15; // 최대 15초 녹화
+
+  let lastResultType = 'photo'; // 'photo' or 'video'
   let lastCapturedBlob = null;
   let lastCapturedDataUrl = null;
+  let lastRecordedBlob = null;
+  let lastRecordedUrl = null;
+  let lastRecordedExt = 'mp4';
+  let lastRecordedMime = 'video/mp4';
 
-  // 1. 오디오 신시사이저 (찰칵 셔터 효과음)
-  const playShutterSound = () => {
+  // 1. 오디오 신시사이저 (찰칵 셔터 효과음 & 녹화 비프음)
+  const playSound = (type = 'shutter') => {
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) return;
       const ctx = new AudioContext();
 
-      const bufferSize = ctx.sampleRate * 0.08;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
+      if (type === 'shutter') {
+        const bufferSize = ctx.sampleRate * 0.08;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+
+        const whiteNoise = ctx.createBufferSource();
+        whiteNoise.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1400, ctx.currentTime);
+        filter.Q.setValueAtTime(3, ctx.currentTime);
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.8, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+
+        whiteNoise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        whiteNoise.start();
+      } else if (type === 'beep') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
       }
-
-      const whiteNoise = ctx.createBufferSource();
-      whiteNoise.buffer = buffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(1400, ctx.currentTime);
-      filter.Q.setValueAtTime(3, ctx.currentTime);
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.8, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
-
-      whiteNoise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-
-      whiteNoise.start();
     } catch (e) {
       console.warn('사운드 재생 에러:', e);
     }
@@ -89,7 +125,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // 3. 토스트 알림 표시
+  // 3. 토스트 알림
   const showToast = (message) => {
     toastEl.textContent = message;
     toastEl.classList.add('show');
@@ -98,7 +134,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 2400);
   };
 
-  // 4. 프레임 설정 및 초기화 (단일 프레임일 경우 캐러셀 영역 숨김)
+  // 4. 모드 전환 (PHOTO / VIDEO)
+  const setMode = (mode) => {
+    if (isRecording) {
+      stopVideoRecord();
+    }
+
+    currentMode = mode;
+    if (mode === 'photo') {
+      modePhotoBtn.classList.add('active');
+      modeVideoBtn.classList.remove('active');
+      shutterLabel.textContent = 'REC';
+      showToast('PHOTO MODE // READY');
+    } else {
+      modeVideoBtn.classList.add('active');
+      modePhotoBtn.classList.remove('active');
+      shutterLabel.textContent = 'REC';
+      showToast('VIDEO MODE // TAP TO RECORD');
+    }
+  };
+
+  modePhotoBtn.addEventListener('click', () => setMode('photo'));
+  modeVideoBtn.addEventListener('click', () => setMode('video'));
+
+  // 5. 프레임 설정 및 초기화
   const initFrames = () => {
     if (!config.frames || config.frames.length <= 1) {
       if (frameSelectorWrapper) {
@@ -131,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   };
 
-  // 5. 카메라 초기화 및 시작
+  // 6. 카메라 초기화 및 시작
   try {
     await camera.startCamera('user');
     renderer.start(camera.isFrontCamera());
@@ -144,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initFrames();
   hashtagText.textContent = config.exhibition.hashtags.join(' ');
 
-  // 6. 카메라 전/후면 전환 버튼
+  // 7. 카메라 전/후면 전환 버튼
   flipBtn.addEventListener('click', async () => {
     try {
       flipBtn.style.opacity = '0.5';
@@ -157,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 7. 타이머 버튼 토글 (OFF -> 3S -> 5S -> OFF)
+  // 8. 타이머 버튼 토글 (OFF -> 3S -> 5S -> OFF)
   timerBtn.addEventListener('click', () => {
     if (currentTimerSeconds === 0) {
       currentTimerSeconds = 3;
@@ -174,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 8. 갤러리 사진 선택 (앨범에서 사진 불러오기)
+  // 9. 갤러리 파일 선택 (사진 또는 영상)
   galleryBtn.addEventListener('click', () => {
     galleryInput.click();
   });
@@ -183,19 +242,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const img = new Image();
-      img.onload = () => {
-        renderer.setCustomImage(img);
-        showToast('IMAGE LOADED // READY');
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          renderer.setCustomImage(img);
+          showToast('IMAGE LOADED // READY');
+        };
+        img.src = event.target.result;
       };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    } else if (file.type.startsWith('video/')) {
+      const vid = document.createElement('video');
+      vid.src = URL.createObjectURL(file);
+      vid.autoplay = true;
+      vid.loop = true;
+      vid.muted = true;
+      vid.playsInline = true;
+      vid.onloadeddata = () => {
+        renderer.setCustomImage(vid);
+        vid.play();
+        showToast('VIDEO LOADED // READY');
+      };
+    }
   });
 
-  // 9. 화면 터치 초점 링 애니메이션
+  // 10. 화면 터치 초점 링 애니메이션
   canvas.addEventListener('pointerdown', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -210,10 +283,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 800);
   });
 
-  // 10. 촬영 실행 로직
-  const executeCapture = async () => {
+  // 11. 사진 촬영 로직
+  const executePhotoCapture = async () => {
     flashEl.classList.add('active');
-    playShutterSound();
+    playSound('shutter');
     triggerHaptic();
 
     setTimeout(() => {
@@ -221,16 +294,105 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 120);
 
     const { blob, dataUrl } = await renderer.captureSnapshot();
+    lastResultType = 'photo';
     lastCapturedBlob = blob;
     lastCapturedDataUrl = dataUrl;
 
+    // 모달 표시
     previewImg.src = dataUrl;
+    previewImg.style.display = 'block';
+    previewVideo.style.display = 'none';
+    if (previewVideo.src) {
+      previewVideo.pause();
+    }
+
+    resultTitle.textContent = 'CAPTURED // RESULT';
+    btnShareText.textContent = 'SHARE TO INSTAGRAM STORY';
+    btnDownloadText.textContent = 'SAVE IMAGE';
+
     resultModal.classList.add('active');
     isCapturing = false;
   };
 
-  // 셔터 버튼 클릭
+  // 12. 영상 녹화 시작 로직
+  const startVideoRecord = () => {
+    if (isRecording) return;
+    isRecording = true;
+    recordingSeconds = 0;
+
+    playSound('beep');
+    triggerHaptic();
+
+    renderer.startVideoRecording();
+
+    // UI 상태 갱신
+    shutterBtn.classList.add('recording');
+    shutterLabel.textContent = 'STOP';
+    recordIndicator.classList.add('active');
+    recordTimer.textContent = '00:00';
+
+    recordingInterval = setInterval(() => {
+      recordingSeconds++;
+      const s = recordingSeconds < 10 ? `0${recordingSeconds}` : `${recordingSeconds}`;
+      recordTimer.textContent = `00:${s}`;
+
+      if (recordingSeconds >= MAX_RECORD_SECONDS) {
+        stopVideoRecord();
+      }
+    }, 1000);
+  };
+
+  // 13. 영상 녹화 종료 로직
+  const stopVideoRecord = async () => {
+    if (!isRecording) return;
+    isRecording = false;
+
+    if (recordingInterval) {
+      clearInterval(recordingInterval);
+      recordingInterval = null;
+    }
+
+    shutterBtn.classList.remove('recording');
+    shutterLabel.textContent = 'REC';
+    recordIndicator.classList.remove('active');
+
+    playSound('beep');
+    triggerHaptic();
+
+    const res = await renderer.stopVideoRecording();
+    if (!res || !res.blob) return;
+
+    lastResultType = 'video';
+    lastRecordedBlob = res.blob;
+    lastRecordedUrl = res.videoUrl;
+    lastRecordedExt = res.ext;
+    lastRecordedMime = res.mimeType;
+
+    // 모달에 비디오 로드
+    previewImg.style.display = 'none';
+    previewVideo.style.display = 'block';
+    previewVideo.src = res.videoUrl;
+    previewVideo.play();
+
+    resultTitle.textContent = 'RECORDED // VIDEO';
+    btnShareText.textContent = 'SHARE TO INSTAGRAM STORY';
+    btnDownloadText.textContent = 'SAVE VIDEO';
+
+    resultModal.classList.add('active');
+  };
+
+  // 14. 셔터 버튼 클릭 이벤트
   shutterBtn.addEventListener('click', async () => {
+    if (currentMode === 'video') {
+      if (!isRecording) {
+        startVideoRecord();
+      } else {
+        stopVideoRecord();
+      }
+      return;
+    }
+
+    // PHOTO 모드
     if (isCapturing) return;
     isCapturing = true;
 
@@ -246,32 +408,74 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
           clearInterval(timerInterval);
           timerOverlay.classList.remove('active');
-          executeCapture();
+          executePhotoCapture();
         }
       }, 1000);
     } else {
-      executeCapture();
+      executePhotoCapture();
     }
   });
 
-  // 11. 결과 모달 액션들
+  // 15. 인스타그램 스타일 길게 누르면 영상 녹화 (Hold to Record)
+  let holdTimer = null;
+  let isHoldRecording = false;
+
+  shutterBtn.addEventListener('pointerdown', () => {
+    if (currentMode === 'photo' && !isCapturing && currentTimerSeconds === 0) {
+      holdTimer = setTimeout(() => {
+        isHoldRecording = true;
+        startVideoRecord();
+      }, 450);
+    }
+  });
+
+  const handlePointerUp = () => {
+    if (holdTimer) {
+      clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+    if (isHoldRecording) {
+      isHoldRecording = false;
+      stopVideoRecord();
+    }
+  };
+
+  shutterBtn.addEventListener('pointerup', handlePointerUp);
+  shutterBtn.addEventListener('pointercancel', handlePointerUp);
+
+  // 16. 결과 모달 공유 & 다운로드 버튼
   btnShareStory.addEventListener('click', async () => {
-    if (!lastCapturedBlob) return;
-    const res = await share.shareImage(lastCapturedBlob, `kuid_standby_${Date.now()}.jpg`);
-    if (res.method === 'web-share') {
-      showToast('STORY SHARE SHEET OPENED');
-    } else if (res.method === 'download') {
-      showToast('IMAGE SAVED TO DEVICE');
+    if (lastResultType === 'photo' && lastCapturedBlob) {
+      const res = await share.shareImage(lastCapturedBlob, `kuid_standby_${Date.now()}.jpg`);
+      if (res.method === 'web-share') {
+        showToast('STORY SHARE SHEET OPENED');
+      } else if (res.method === 'download') {
+        showToast('IMAGE SAVED TO DEVICE');
+      }
+    } else if (lastResultType === 'video' && lastRecordedBlob) {
+      const res = await share.shareVideo(lastRecordedBlob, `kuid_standby_${Date.now()}.${lastRecordedExt}`, lastRecordedMime);
+      if (res.method === 'web-share') {
+        showToast('STORY SHARE SHEET OPENED');
+      } else if (res.method === 'download') {
+        showToast('VIDEO SAVED TO DEVICE');
+      }
     }
   });
 
   btnDownload.addEventListener('click', () => {
-    if (!lastCapturedDataUrl) return;
-    share.downloadImage(lastCapturedDataUrl, `kuid_standby_${Date.now()}.jpg`);
-    showToast('IMAGE SAVED TO DEVICE');
+    if (lastResultType === 'photo' && lastCapturedDataUrl) {
+      share.downloadImage(lastCapturedDataUrl, `kuid_standby_${Date.now()}.jpg`);
+      showToast('IMAGE SAVED TO DEVICE');
+    } else if (lastResultType === 'video' && lastRecordedBlob) {
+      share.downloadVideo(lastRecordedBlob, `kuid_standby_${Date.now()}.${lastRecordedExt}`);
+      showToast('VIDEO SAVED TO DEVICE');
+    }
   });
 
   btnRetake.addEventListener('click', () => {
+    if (previewVideo.src) {
+      previewVideo.pause();
+    }
     resultModal.classList.remove('active');
   });
 
@@ -282,7 +486,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 12. 이벤트 안내 모달
+  // 17. 이벤트 안내 모달
   const openEventModal = () => {
     eventModal.classList.add('active');
   };
@@ -300,6 +504,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   [resultModal, eventModal].forEach(modal => {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
+        if (previewVideo.src) {
+          previewVideo.pause();
+        }
         modal.classList.remove('active');
       }
     });

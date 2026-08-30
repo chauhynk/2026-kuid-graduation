@@ -1,5 +1,5 @@
 /**
- * Share Module - 인스타그램 공유, 이미지 저장, 해시태그 복사
+ * Share Module - 인스타그램 공유, 이미지/영상 저장, 해시태그 복사
  */
 class ShareManager {
   constructor(config) {
@@ -7,7 +7,7 @@ class ShareManager {
   }
 
   /**
-   * 인스타그램 스토리 또는 모바일 시스템 공유창 띄우기 (Web Share API)
+   * 인스타그램 스토리 또는 모바일 시스템 공유창 띄우기 (사진)
    */
   async shareImage(blob, filename = 'kuid_standby_story.jpg') {
     if (!blob) {
@@ -59,6 +59,54 @@ class ShareManager {
   }
 
   /**
+   * 인스타그램 스토리 또는 모바일 시스템 공유창으로 영상 공유
+   */
+  async shareVideo(blob, filename = 'kuid_standby_video.mp4', mimeType = 'video/mp4') {
+    if (!blob) throw new Error('공유할 영상이 없습니다.');
+
+    const file = new File([blob], filename, { type: mimeType });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: this.config.exhibition.title,
+          text: `${this.config.exhibition.title}\n${this.config.exhibition.hashtags.join(' ')}`
+        });
+        return { success: true, method: 'web-share' };
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          return { success: false, aborted: true };
+        }
+        console.warn('영상 Web Share 실패, 다운로드로 대체:', err);
+      }
+    }
+
+    this.downloadVideo(blob, filename);
+    return { success: true, method: 'download' };
+  }
+
+  /**
+   * 영상 다운로드 저장
+   */
+  downloadVideo(blobOrUrl, filename = 'kuid_standby_video.mp4') {
+    const url = typeof blobOrUrl === 'string'
+      ? blobOrUrl
+      : URL.createObjectURL(blobOrUrl);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    if (typeof blobOrUrl !== 'string') {
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    }
+  }
+
+  /**
    * 이벤트 해시태그 클립보드 복사
    */
   async copyHashtags() {
@@ -86,7 +134,7 @@ class ShareManager {
   }
 
   /**
-   * 인스타그램 공식 계정 열기 (https://www.instagram.com/kuid_graduation/)
+   * 인스타그램 공식 계정 열기
    */
   openInstagramAccount() {
     const webUrl = this.config.exhibition.instagramUrl || "https://www.instagram.com/kuid_graduation/";
@@ -99,7 +147,7 @@ class ShareManager {
       if (Date.now() - start < 1500) {
         window.open(webUrl, '_blank');
       }
-    }, 1000);
+    }, 500);
   }
 }
 

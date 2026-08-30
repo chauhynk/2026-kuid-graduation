@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
 
-  <!-- 스타일시트 (모바일 캐시 방지) -->
-  <link rel="stylesheet" href="css/style.css?v=20260830_2" />
+  <!-- 스타일시트 (모바일 캐시 방지 버전) -->
+  <link rel="stylesheet" href="css/style.css?v=20260830_3" />
 </head>
 <body>
   <div id="app">
@@ -37,7 +37,7 @@
       <div class="flash-effect"></div>
     </div>
 
-    <!-- 2. 상단 브루탈리스트 테크니컬 바 (이모지 배제, Noto Sans 타이포그래피) -->
+    <!-- 2. 상단 브루탈리스트 탑 바 (비네팅 제거) -->
     <header class="top-bar">
       <div class="brand-badge" id="brand-badge">
         <div class="brand-radar-icon">
@@ -46,6 +46,12 @@
           <div class="green-dot"></div>
         </div>
         <span>KUID // STANDBY</span>
+      </div>
+
+      <!-- 영상 녹화 시간 인디케이터 -->
+      <div class="record-indicator" id="record-indicator">
+        <span class="rec-dot"></span>
+        <span id="record-timer">00:00</span> / 00:15
       </div>
 
       <div class="top-controls">
@@ -67,26 +73,30 @@
       </div>
     </div>
 
-    <!-- 4. 하단 프레임 선택 & 셔터 컨트롤 -->
+    <!-- 4. 하단 컨트롤 (모드 전환 & 셔터 - 비네팅 제거) -->
     <div class="bottom-bar">
-      <!-- 프레임 캐러셀 -->
+      <!-- 프레임 캐러셀 (단일 프레임 시 숨김) -->
       <div class="frame-selector-wrapper">
-        <div class="frame-carousel" id="frame-carousel">
-          <!-- js/app.js에서 config.frames 기반으로 자동 생성 -->
-        </div>
+        <div class="frame-carousel" id="frame-carousel"></div>
+      </div>
+
+      <!-- 사진 / 영상 모드 스위처 (PHOTO / VIDEO) -->
+      <div class="mode-switcher">
+        <button class="mode-btn active" id="mode-photo-btn">PHOTO</button>
+        <button class="mode-btn" id="mode-video-btn">VIDEO</button>
       </div>
 
       <!-- 액션 컨트롤 (앨범 / 셔터 / 이벤트) -->
       <div class="action-controls">
-        <input type="file" id="gallery-input" accept="image/*" style="display: none;" />
+        <input type="file" id="gallery-input" accept="image/*,video/*" style="display: none;" />
         <button class="tech-action-btn" id="gallery-btn" title="앨범에서 사진 불러오기">
           UPLOAD
         </button>
 
-        <!-- 키비주얼 모티브 셔터 버튼 -->
-        <button class="shutter-btn" id="shutter-btn" title="사진 촬영">
+        <!-- 셔터 버튼 (사진 촬영 & 영상 녹화 겸용) -->
+        <button class="shutter-btn" id="shutter-btn" title="촬영/녹화">
           <div class="shutter-inner">
-            <span class="shutter-label">REC</span>
+            <span class="shutter-label" id="shutter-label">REC</span>
           </div>
         </button>
 
@@ -96,16 +106,19 @@
       </div>
     </div>
 
-    <!-- 5. 촬영 결과 모달 (Result Modal) -->
+    <!-- 5. 촬영 결과 모달 (Result Modal - 사진 & 영상 지원) -->
     <div class="modal-overlay" id="result-modal">
       <div class="modal-sheet">
         <div class="modal-header">
-          <h3 class="modal-title">CAPTURED // RESULT</h3>
+          <h3 class="modal-title" id="result-title">CAPTURED // RESULT</h3>
           <span class="modal-tag-green">● READY</span>
         </div>
 
         <div class="preview-container">
-          <img id="preview-img" class="preview-image" alt="촬영 결과" />
+          <!-- 사진 프리뷰 -->
+          <img id="preview-img" class="preview-image" alt="촬영 결과" style="display: block;" />
+          <!-- 영상 프리뷰 -->
+          <video id="preview-video" class="preview-image" autoplay loop playsinline muted controls style="display: none;"></video>
         </div>
 
         <!-- 해시태그 박스 -->
@@ -119,12 +132,12 @@
         <!-- 버튼 그룹 -->
         <div class="btn-group">
           <button class="primary-btn" id="btn-share-story">
-            <span>SHARE TO INSTAGRAM STORY</span>
+            <span id="btn-share-text">SHARE TO INSTAGRAM STORY</span>
           </button>
           
           <div class="btn-row">
             <button class="secondary-btn" id="btn-download">
-              <span>SAVE IMAGE</span>
+              <span id="btn-download-text">SAVE IMAGE</span>
             </button>
             <button class="secondary-btn" id="btn-retake">
               <span>RETAKE</span>
@@ -150,7 +163,7 @@
               <span class="step-title">STANDBY 상황 선택 &amp; 촬영</span>
             </div>
             <p class="step-desc">
-              아래 제시된 <strong>5가지 STANDBY 상황</strong> 중 하나를 골라 필터를 적용하여 촬영해 주세요.
+              아래 제시된 <strong>5가지 STANDBY 상황</strong> 중 하나를 골라 사진 또는 영상 필터를 적용하여 촬영해 주세요.
             </p>
             <div class="mission-list">
               <div class="mission-item"><span class="mission-badge">A</span> 7층 엘리베이터 기다리며 STANDBY</div>
@@ -168,7 +181,7 @@
               <span class="step-title">인스타그램 스토리 업로드 &amp; 계정 태그</span>
             </div>
             <p class="step-desc">
-              촬영한 사진을 인스타그램 스토리에 업로드할 때, 건국대학교 산업디자인학과 공식 계정 <strong>@kuid_graduation</strong> 을 태그하고 필수 해시태그를 포함해 주세요.
+              촬영한 사진 또는 영상을 인스타그램 스토리에 업로드할 때, 건국대학교 산업디자인학과 공식 계정 <strong>@kuid_graduation</strong> 을 태그하고 필수 해시태그를 포함해 주세요.
             </p>
           </div>
 
@@ -199,11 +212,11 @@
     <div class="toast" id="toast"></div>
   </div>
 
-  <!-- 스크립트 로드 (모바일 캐시 방지 버전 파라미터 적용) -->
-  <script src="js/config.js?v=20260830_2"></script>
-  <script src="js/camera.js?v=20260830_2"></script>
-  <script src="js/filterRenderer.js?v=20260830_2"></script>
-  <script src="js/share.js?v=20260830_2"></script>
-  <script src="js/app.js?v=20260830_2"></script>
+  <!-- 스크립트 로드 (모바일 캐시 방지 버전) -->
+  <script src="js/config.js?v=20260830_3"></script>
+  <script src="js/camera.js?v=20260830_3"></script>
+  <script src="js/filterRenderer.js?v=20260830_3"></script>
+  <script src="js/share.js?v=20260830_3"></script>
+  <script src="js/app.js?v=20260830_3"></script>
 </body>
 </html>
