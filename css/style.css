@@ -438,14 +438,14 @@ html, body {
   color: #000000;
 }
 
-/* 키비주얼 레이더 셔터 버튼 */
+/* 미니멀 화이트 원 & 검정 얇은 스트로크 셔터 버튼 */
 .shutter-btn {
-  width: 80px;
-  height: 80px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   background: transparent;
-  border: 3px dashed #FFFFFF;
-  padding: 5px;
+  border: 2px solid #FFFFFF;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -459,7 +459,7 @@ html, body {
   height: 100%;
   border-radius: 50%;
   background: #FFFFFF;
-  position: relative;
+  border: 1.5px solid #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -473,37 +473,13 @@ html, body {
   letter-spacing: 1px;
 }
 
-.shutter-inner::before {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 7px;
-  height: 7px;
-  background: var(--kv-red);
-  border-radius: 50%;
-}
-.shutter-inner::after {
-  content: '';
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  width: 7px;
-  height: 7px;
-  background: var(--kv-green);
-  border-radius: 50%;
-}
-
 .shutter-btn:active {
   transform: scale(0.92);
 }
 
 .shutter-btn:active .shutter-inner {
   transform: scale(0.88);
-  background: #000000;
-}
-.shutter-btn:active .shutter-label {
-  color: #FFFFFF;
+  background: #E5E5E5;
 }
 
 /* ==========================================================================
