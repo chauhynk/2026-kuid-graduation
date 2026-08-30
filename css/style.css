@@ -362,21 +362,23 @@ html, body {
 }
 .frame-carousel::-webkit-scrollbar {
   display: none;
+}
+
 /* 사진 / 영상 모드 스위처 */
-.mode-switcher-container {
+.mode-switcher {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: rgba(0, 0, 0, 0.65);
+  gap: 18px;
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-subtle);
-  padding: 4px 16px;
+  padding: 4px 14px;
   border-radius: 20px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
-.mode-tab-btn {
+.mode-btn {
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -389,11 +391,11 @@ html, body {
   transition: all 0.2s ease;
 }
 
-.mode-tab-btn.active {
+.mode-btn.active {
   color: #FFFFFF;
 }
 
-.mode-tab-btn.active::after {
+.mode-btn.active::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -405,24 +407,22 @@ html, body {
   background: #FFFFFF;
 }
 
-/* 셔터 컨트롤 (UPLOAD - SHUTTER - GUIDE 가로 정렬) */
-.shutter-controls {
+/* 액션 컨트롤 (UPLOAD / SHUTTER / GUIDE) */
+.action-controls {
   width: 100%;
   max-width: 380px;
-  padding: 0 24px;
+  padding: 0 20px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 }
 
-.icon-btn {
+.tech-action-btn {
   width: 68px;
   height: 44px;
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-white);
   display: flex;
   align-items: center;
@@ -435,28 +435,10 @@ html, body {
   transition: all 0.15s ease;
 }
 
-.icon-btn:active {
+.tech-action-btn:active {
   transform: scale(0.94);
   background: #FFFFFF;
   color: #000000;
-}
-
-/* 하단 메타 인포 바 */
-.footer-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 380px;
-  padding: 4px 24px 0;
-  margin-top: 4px;
-}
-
-.coord-info {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: 0.8px;
 }
 
 /* 미니멀 화이트 원 & 검정 얇은 스트로크 셔터 버튼 */
