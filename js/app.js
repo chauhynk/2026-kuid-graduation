@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const frameSelectorWrapper = document.querySelector('.frame-selector-wrapper');
   const frameCarousel = document.getElementById('frame-carousel');
   const shutterBtn = document.getElementById('shutter-btn');
-  const shutterLabel = document.getElementById('shutter-label');
   const flipBtn = document.getElementById('flip-camera-btn');
   const timerBtn = document.getElementById('timer-btn');
   const timerStatus = document.getElementById('timer-status');
@@ -144,12 +143,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (mode === 'photo') {
       modePhotoBtn.classList.add('active');
       modeVideoBtn.classList.remove('active');
-      shutterLabel.textContent = 'REC';
       showToast('PHOTO MODE // READY');
     } else {
       modeVideoBtn.classList.add('active');
       modePhotoBtn.classList.remove('active');
-      shutterLabel.textContent = 'REC';
       showToast('VIDEO MODE // TAP TO RECORD');
     }
   };
@@ -327,7 +324,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // UI 상태 갱신
     shutterBtn.classList.add('recording');
-    shutterLabel.textContent = 'STOP';
     recordIndicator.classList.add('active');
     recordTimer.textContent = '00:00';
 
@@ -353,7 +349,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     shutterBtn.classList.remove('recording');
-    shutterLabel.textContent = 'REC';
     recordIndicator.classList.remove('active');
 
     playSound('beep');

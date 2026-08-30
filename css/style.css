@@ -469,13 +469,6 @@ html, body {
   transition: transform 0.15s ease, background-color 0.2s;
 }
 
-.shutter-label {
-  font-size: 13px;
-  font-weight: 900;
-  color: #000000;
-  letter-spacing: 1px;
-}
-
 .shutter-btn:active {
   transform: scale(0.92);
 }
@@ -485,7 +478,7 @@ html, body {
   background: #E5E5E5;
 }
 
-/* 영상 녹화 중 셔터 상태 */
+/* 영상 녹화 중 셔터 상태 (레드 스퀘어 정지 버튼 형태) */
 .shutter-btn.recording {
   border-color: var(--kv-red);
 }
@@ -493,13 +486,8 @@ html, body {
 .shutter-btn.recording .shutter-inner {
   background: var(--kv-red);
   border-color: #FFFFFF;
-  border-radius: 8px; /* 녹화 중 네모 정지 버튼 형태 */
-  transform: scale(0.75);
-}
-
-.shutter-btn.recording .shutter-label {
-  color: #FFFFFF;
-  font-size: 11px;
+  border-radius: 8px;
+  transform: scale(0.65);
 }
 
 /* ==========================================================================
