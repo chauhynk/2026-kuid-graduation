@@ -1,0 +1,10 @@
+# OS & Editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Local server scripts (optional)
+server_bg.ps1
+server_tcp.ps1

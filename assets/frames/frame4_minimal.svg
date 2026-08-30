@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <!-- 얇은 정밀 헤어라인 보더 -->
+  <rect x="50" y="50" width="980" height="1820" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.6" />
+  
+  <!-- 4개 코너 키비주얼 미니 S-스포크 -->
+  <g transform="translate(100, 100)">
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="4,4" />
+    <path d="M 0 0 L 30 0 A 30 30 0 0 1 21 21 Z" fill="#FF1E1E" />
+  </g>
+
+  <g transform="translate(980, 100)">
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="4,4" />
+    <path d="M 0 0 L 0 -30 A 30 30 0 0 1 21 -21 Z" fill="#00FF2A" />
+  </g>
+
+  <g transform="translate(100, 1820)">
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="4,4" />
+    <path d="M 0 0 L -30 0 A 30 30 0 0 1 -21 -21 Z" fill="#00FF2A" />
+  </g>
+
+  <g transform="translate(980, 1820)">
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="4,4" />
+    <path d="M 0 0 L 0 30 A 30 30 0 0 1 -21 21 Z" fill="#FF1E1E" />
+  </g>
+
+  <!-- 상단 중앙 타이포 -->
+  <g transform="translate(540, 110)">
+    <text x="0" y="0" text-anchor="middle" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="20" font-weight="900" letter-spacing="4" fill="#FFFFFF">KONKUK UNIV. INDUSTRIAL DESIGN</text>
+    <text x="0" y="24" text-anchor="middle" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="12" font-weight="500" letter-spacing="3" fill="rgba(255,255,255,0.7)">[ 2026 DEGREE SHOW // STANDBY ]</text>
+  </g>
+
+  <!-- 하단 중앙 타이포 -->
+  <g transform="translate(540, 1820)">
+    <text x="0" y="0" text-anchor="middle" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="20" font-weight="800" letter-spacing="3" fill="#FFFFFF">@KUID_GRADUATION</text>
+    <text x="0" y="26" text-anchor="middle" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="12" font-weight="500" letter-spacing="2" fill="#00FF2A">STANDBY CALIBRATION</text>
+  </g>
+</svg>

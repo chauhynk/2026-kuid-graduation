@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <!-- 상단 바 -->
+  <rect x="0" y="0" width="1080" height="160" fill="#000000" />
+  <line x1="0" y1="160" x2="1080" y2="160" stroke="#FFFFFF" stroke-width="4" />
+
+  <rect x="50" y="45" width="28" height="70" fill="#FF1E1E" />
+  <text x="95" y="85" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="32" font-weight="900" letter-spacing="3" fill="#FFFFFF">KUID DEGREE SHOW</text>
+  <text x="95" y="115" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="16" font-weight="700" letter-spacing="2" fill="#00FF2A">@KUID_GRADUATION</text>
+
+  <g transform="translate(1030, 80)">
+    <circle cx="-35" cy="0" r="28" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-dasharray="6,6" />
+    <path d="M -35 0 L -7 0 A 28 28 0 0 1 -15 20 Z" fill="#FF1E1E" />
+  </g>
+
+  <!-- 하단 바: 5가지 STANDBY 미션 아카이브 -->
+  <rect x="0" y="1720" width="1080" height="200" fill="#000000" />
+  <line x1="0" y1="1720" x2="1080" y2="1720" stroke="#FFFFFF" stroke-width="4" />
+
+  <rect x="50" y="1760" width="28" height="85" fill="#00FF2A" />
+  <text x="95" y="1796" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="26" font-weight="900" fill="#FFFFFF" letter-spacing="2">STANDBY SITUATION ARCHIVE</text>
+  <text x="95" y="1824" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="14" fill="rgba(255,255,255,0.75)" letter-spacing="1">7F ELEVATOR • PRESENTATION • CRITIQUE • LAB • TASK</text>
+  <text x="95" y="1848" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="13" font-weight="700" fill="#FF1E1E">#건국대산디 #건대산디졸전 #STANDBY #kuid_graduation</text>
+
+  <!-- 좌우 측면 대시 테두리 -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="8" stroke-dasharray="16,14" opacity="0.6">
+    <line x1="20" y1="180" x2="20" y2="1700" />
+    <line x1="1060" y1="180" x2="1060" y2="1700" />
+  </g>
+</svg>

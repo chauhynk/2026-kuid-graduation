@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <!-- 필름 프레임 / 모던 4컷 포토부스 스타일 -->
+  <defs>
+    <!-- 상하단 레터박스 그라디언트 -->
+    <linearGradient id="blackGradTop" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0F0F12" stop-opacity="0.95" />
+      <stop offset="85%" stop-color="#0F0F12" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0F0F12" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="blackGradBottom" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#0F0F12" stop-opacity="0.95" />
+      <stop offset="85%" stop-color="#0F0F12" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0F0F12" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- 상하단 블러/그라디언트 배경 바 -->
+  <rect x="0" y="0" width="1080" height="240" fill="url(#blackGradTop)" />
+  <rect x="0" y="1680" width="1080" height="240" fill="url(#blackGradBottom)" />
+
+  <!-- 필름 홀 (좌우) -->
+  <g fill="#FFFFFF" opacity="0.4">
+    <!-- 좌측 구멍들 -->
+    <rect x="20" y="280" width="20" height="30" rx="6" />
+    <rect x="20" y="380" width="20" height="30" rx="6" />
+    <rect x="20" y="480" width="20" height="30" rx="6" />
+    <rect x="20" y="580" width="20" height="30" rx="6" />
+    <rect x="20" y="680" width="20" height="30" rx="6" />
+    <rect x="20" y="780" width="20" height="30" rx="6" />
+    <rect x="20" y="880" width="20" height="30" rx="6" />
+    <rect x="20" y="980" width="20" height="30" rx="6" />
+    <rect x="20" y="1080" width="20" height="30" rx="6" />
+    <rect x="20" y="1180" width="20" height="30" rx="6" />
+    <rect x="20" y="1280" width="20" height="30" rx="6" />
+    <rect x="20" y="1380" width="20" height="30" rx="6" />
+    <rect x="20" y="1480" width="20" height="30" rx="6" />
+    <rect x="20" y="1580" width="20" height="30" rx="6" />
+
+    <!-- 우측 구멍들 -->
+    <rect x="1040" y="280" width="20" height="30" rx="6" />
+    <rect x="1040" y="380" width="20" height="30" rx="6" />
+    <rect x="1040" y="480" width="20" height="30" rx="6" />
+    <rect x="1040" y="580" width="20" height="30" rx="6" />
+    <rect x="1040" y="680" width="20" height="30" rx="6" />
+    <rect x="1040" y="780" width="20" height="30" rx="6" />
+    <rect x="1040" y="880" width="20" height="30" rx="6" />
+    <rect x="1040" y="980" width="20" height="30" rx="6" />
+    <rect x="1040" y="1080" width="20" height="30" rx="6" />
+    <rect x="1040" y="1180" width="20" height="30" rx="6" />
+    <rect x="1040" y="1280" width="20" height="30" rx="6" />
+    <rect x="1040" y="1380" width="20" height="30" rx="6" />
+    <rect x="1040" y="1480" width="20" height="30" rx="6" />
+    <rect x="1040" y="1580" width="20" height="30" rx="6" />
+  </g>
+
+  <!-- 내부 프레임 라인 -->
+  <rect x="60" y="180" width="960" height="1560" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.6" />
+
+  <!-- 상단 브랜딩 -->
+  <g transform="translate(540, 110)">
+    <text x="0" y="0" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="32" font-weight="900" letter-spacing="8" fill="#FFFFFF">PHOTO ARCHIVE</text>
+    <text x="0" y="32" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="14" font-weight="600" letter-spacing="4" fill="#FFB800">LIMITED EDITION • 4-CUTS</text>
+  </g>
+
+  <!-- 하단 서명 및 전시회 스탬프 -->
+  <g transform="translate(540, 1800)">
+    <text x="0" y="0" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="28" font-weight="800" letter-spacing="6" fill="#FFFFFF">2026 GRADUATION SHOW</text>
+    <text x="0" y="34" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="400" letter-spacing="2" fill="rgba(255,255,255,0.7)">EVERY MOMENT BECOMES ART</text>
+  </g>
+</svg>

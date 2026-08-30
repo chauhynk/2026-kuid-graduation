@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <filter id="crisp-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.8" />
+    </filter>
+  </defs>
+
+  <!-- 외곽 테두리 & 기술적 코디네이트 -->
+  <g stroke="#FFFFFF" stroke-width="1.5" opacity="0.65">
+    <rect x="40" y="40" width="1000" height="1840" fill="none" />
+    <path d="M 30 40 L 50 40 M 40 30 L 40 50" />
+    <path d="M 1030 40 L 1050 40 M 1040 30 L 1040 50" />
+    <path d="M 30 1880 L 50 1880 M 40 1870 L 40 1890" />
+    <path d="M 1030 1880 L 1050 1880 M 1040 1870 L 1040 1890" />
+  </g>
+
+  <!-- 상단 헤더: 건국대학교 산업디자인학과 & STANDBY -->
+  <g transform="translate(60, 90)">
+    <rect x="0" y="0" width="8" height="38" fill="#FF1E1E" />
+    <text x="20" y="22" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="22" font-weight="900" letter-spacing="3" fill="#FFFFFF">KUID DEGREE SHOW 2026</text>
+    <text x="20" y="44" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="12" font-weight="700" letter-spacing="2" fill="rgba(255,255,255,0.75)">KONKUK UNIV. INDUSTRIAL DESIGN // STANDBY</text>
+    
+    <g transform="translate(940, 15)">
+      <circle cx="-50" cy="0" r="5" fill="#00FF2A" />
+      <text x="-35" y="5" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">360°</text>
+    </g>
+  </g>
+
+  <!-- ⭐️ 중앙 S-RADAR 키비주얼 오버레이 -->
+  <g transform="translate(540, 960)" filter="url(#crisp-shadow)">
+    <!-- 배경 헤어라인 그리드 축 -->
+    <g stroke="rgba(255,255,255,0.25)" stroke-width="1">
+      <line x1="-320" y1="0" x2="320" y2="0" stroke-dasharray="2,4" />
+      <line x1="0" y1="-320" x2="0" y2="320" stroke-dasharray="2,4" />
+      <line x1="-226" y1="-226" x2="226" y2="226" stroke-dasharray="2,4" />
+      <line x1="-226" y1="226" x2="226" y2="-226" stroke-dasharray="2,4" />
+    </g>
+
+    <!-- 상단 원 (Upper Dial: y = -140) -->
+    <g transform="translate(0, -140)">
+      <circle cx="0" cy="0" r="160" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-dasharray="14,14" stroke-dashoffset="5" />
+      <circle cx="0" cy="0" r="120" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="8,8" />
+      <circle cx="0" cy="0" r="85" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1" />
+      
+      <path d="M 0 0 L 160 0 A 160 160 0 0 1 138 80 Z" fill="#FF1E1E" />
+      
+      <g stroke="#FFFFFF" stroke-width="2.5">
+        <line x1="0" y1="0" x2="-45" y2="0" />
+        <line x1="0" y1="0" x2="-43" y2="-15" />
+        <line x1="0" y1="0" x2="-39" y2="-29" />
+        <line x1="0" y1="0" x2="-32" y2="-41" />
+        <line x1="0" y1="0" x2="-22" y2="-50" />
+        <line x1="0" y1="0" x2="-12" y2="-57" />
+        <line x1="0" y1="0" x2="0" y2="-60" />
+        <line x1="0" y1="0" x2="-43" y2="15" />
+        <line x1="0" y1="0" x2="-39" y2="29" />
+        <line x1="0" y1="0" x2="-32" y2="41" />
+        <line x1="0" y1="0" x2="-22" y2="50" />
+        <line x1="0" y1="0" x2="-12" y2="57" />
+        <line x1="0" y1="0" x2="0" y2="60" />
+      </g>
+    </g>
+
+    <!-- 하단 원 (Lower Dial: y = 140) -->
+    <g transform="translate(0, 140)">
+      <circle cx="0" cy="0" r="160" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-dasharray="14,14" stroke-dashoffset="12" />
+      <circle cx="0" cy="0" r="120" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="8,8" />
+      <circle cx="0" cy="0" r="85" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1" />
+
+      <path d="M 0 0 L -160 0 A 160 160 0 0 1 -138 80 Z" fill="#00FF2A" />
+
+      <g stroke="#FFFFFF" stroke-width="2.5">
+        <line x1="0" y1="0" x2="45" y2="0" />
+        <line x1="0" y1="0" x2="43" y2="15" />
+        <line x1="0" y1="0" x2="39" y2="29" />
+        <line x1="0" y1="0" x2="32" y2="41" />
+        <line x1="0" y1="0" x2="22" y2="50" />
+        <line x1="0" y1="0" x2="12" y2="57" />
+        <line x1="0" y1="0" x2="0" y2="60" />
+        <line x1="0" y1="0" x2="-43" y2="15" />
+        <line x1="0" y1="0" x2="-39" y2="29" />
+        <line x1="0" y1="0" x2="-32" y2="41" />
+        <line x1="0" y1="0" x2="-22" y2="50" />
+        <line x1="0" y1="0" x2="-12" y2="57" />
+      </g>
+    </g>
+  </g>
+
+  <!-- 하단 정보 & STANDBY 아카이브 -->
+  <g transform="translate(60, 1780)">
+    <g transform="translate(0, -20)">
+      <rect x="0" y="0" width="90" height="26" fill="#FF1E1E" />
+      <text x="45" y="18" text-anchor="middle" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="12" font-weight="900" fill="#FFFFFF">STANDBY</text>
+      
+      <rect x="98" y="0" width="160" height="26" fill="#00FF2A" />
+      <text x="178" y="18" text-anchor="middle" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="12" font-weight="900" fill="#000000">@KUID_GRADUATION</text>
+    </g>
+
+    <text x="0" y="44" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="28" font-weight="900" letter-spacing="2" fill="#FFFFFF">STANDBY ARCHIVE</text>
+    <text x="0" y="72" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="14" font-weight="400" letter-spacing="1" fill="rgba(255,255,255,0.75)">[ KONKUK UNIV. 7F // 37°32'33"N 127°04'38"E ]</text>
+  </g>
+
+  <!-- 우측 하단 캘리브레이션 마크 -->
+  <g transform="translate(940, 1800)">
+    <circle cx="0" cy="0" r="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4,4" />
+    <path d="M 0 0 L 32 0 A 32 32 0 0 1 22 22 Z" fill="#FF1E1E" />
+    <text x="0" y="48" text-anchor="middle" font-family="'Noto Sans KR', 'Noto Sans', sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">KUID-01</text>
+  </g>
+</svg>
