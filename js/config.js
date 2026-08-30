@@ -5,7 +5,7 @@
 window.APP_CONFIG = {
   // 🎓 졸업전시 기본 정보
   exhibition: {
-    title: "2026 KUID GRADUATION SHOW // STANDBY",
+    title: "KONKUK UNIV. INDUSTRIAL DESIGN // 2026 DEGREE SHOW",
     department: "건국대학교 산업디자인학과",
     theme: "STANDBY // CALIBRATION ARCHIVE",
     instagramId: "@kuid_graduation",
