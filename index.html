@@ -27,7 +27,7 @@
   <meta http-equiv="Expires" content="0" />
 
   <!-- 스타일시트 (모바일 캐시 방지 버전) -->
-  <link rel="stylesheet" href="css/style.css?v=20260830_RESTORED_14" />
+  <link rel="stylesheet" href="css/style.css?v=20260830_CLEAN_15" />
 </head>
 <body>
   <div id="app">
@@ -71,7 +71,7 @@
       </div>
     </header>
 
-    <!-- 3. 타이머 카운트다운 오버레이 -->
+    <!-- 3. 타이머 카운트다운 숫자 오버레이 -->
     <div class="timer-overlay">
       <div class="timer-box">
         <div class="timer-number">3</div>
@@ -124,45 +124,42 @@
           <video id="preview-video" class="preview-image" autoplay loop playsinline muted controls style="display: none;"></video>
         </div>
 
-        <!-- 미션 해시태그 안내 박스 -->
+        <!-- 해시태그 박스 -->
         <div class="hashtag-box">
-          <div class="hashtag-label">OFFICIAL TAGS &amp; MENTION</div>
-          <div class="hashtag-text" id="hashtag-display">#건국대산디 #건대산디졸전 #STANDBY @kuid_graduation</div>
-          <button class="tech-copy-btn" id="btn-copy-hashtags">COPY ALL TAGS</button>
+          <span class="hashtag-text" id="hashtag-display">#건국대산디 #건대산디졸전 #STANDBY @kuid_graduation</span>
+          <button class="secondary-btn" id="btn-copy-hashtags" style="flex: none; padding: 8px 14px; font-size: 11px;">
+            COPY
+          </button>
         </div>
 
+        <!-- 버튼 그룹 -->
         <div class="btn-group">
-          <!-- 인스타그램 스토리 즉시 공유 버튼 -->
           <button class="primary-btn" id="btn-share-story">
             <span id="btn-share-text">SHARE TO INSTAGRAM STORY</span>
           </button>
-          <!-- 기기에 파일 직접 저장 버튼 -->
-          <button class="secondary-btn" id="btn-download">
-            <span id="btn-download-text">SAVE IMAGE</span>
-          </button>
-          <button class="ghost-btn" id="btn-retake">RETAKE</button>
+          
+          <div class="btn-row">
+            <button class="secondary-btn" id="btn-download">
+              <span id="btn-download-text">SAVE IMAGE</span>
+            </button>
+            <button class="secondary-btn" id="btn-retake">
+              <span>RETAKE</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 6. STANDBY 이벤트 참여 가이드 모달 (Event Guide Modal) -->
+    <!-- 6. 이벤트 안내 모달 (Event Modal) -->
     <div class="modal-overlay" id="event-modal">
       <div class="modal-sheet">
         <div class="modal-header">
-          <h3 class="modal-title">EVENT BRIEF // STANDBY</h3>
-          <span class="modal-tag-green">INFO</span>
+          <h3 class="modal-title">EVENT GUIDE // STANDBY</h3>
+          <span class="modal-tag-red">● KUID 2026</span>
         </div>
 
-        <div class="modal-body-scroll">
-          <div class="brief-hero">
-            <div class="hero-dept">KONKUK UNIV. INDUSTRIAL DESIGN</div>
-            <div class="hero-title">2026 DEGREE SHOW : STANDBY</div>
-            <p class="hero-desc">
-              졸업전시의 메인 그래픽 모티프를 활용한 실시간 AR 카메라 필터입니다. 일상 속 나만의 STANDBY 순간을 기록하고 인스타그램에 공유해 보세요.
-            </p>
-          </div>
-
-          <!-- 섹션 1: 미션 가이드 -->
+        <div class="event-content-wrapper">
+          <!-- 섹션 1: 미션 상황 선택 -->
           <div class="event-step-card">
             <div class="step-header">
               <span class="step-num">01</span>
@@ -219,10 +216,10 @@
   </div>
 
   <!-- 스크립트 로드 (모바일 캐시 방지 버전) -->
-  <script src="js/config.js?v=20260830_RESTORED_14"></script>
-  <script src="js/camera.js?v=20260830_RESTORED_14"></script>
-  <script src="js/filterRenderer.js?v=20260830_RESTORED_14"></script>
-  <script src="js/share.js?v=20260830_RESTORED_14"></script>
-  <script src="js/app.js?v=20260830_RESTORED_14"></script>
+  <script src="js/config.js?v=20260830_CLEAN_15"></script>
+  <script src="js/camera.js?v=20260830_CLEAN_15"></script>
+  <script src="js/filterRenderer.js?v=20260830_CLEAN_15"></script>
+  <script src="js/share.js?v=20260830_CLEAN_15"></script>
+  <script src="js/app.js?v=20260830_CLEAN_15"></script>
 </body>
 </html>
