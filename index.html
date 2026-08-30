@@ -27,7 +27,7 @@
   <meta http-equiv="Expires" content="0" />
 
   <!-- 스타일시트 (모바일 캐시 방지 버전) -->
-  <link rel="stylesheet" href="css/style.css?v=20260830_4" />
+  <link rel="stylesheet" href="css/style.css?v=20260830_7" />
 </head>
 <body>
   <div id="app">
@@ -36,6 +36,11 @@
       <video id="camera-feed" playsinline webkit-playsinline autoplay muted></video>
       <canvas id="render-canvas"></canvas>
       
+      <!-- ⭐️ 실시간 TV 테스트 패턴 S-로고 애니메이션 오버레이 ⭐️ -->
+      <div class="svg-filter-overlay" id="svg-filter-overlay">
+        <img id="svg-filter-img" class="svg-filter-img" src="assets/frames/kuid_s_tv_animated.svg?v=20260830_6" alt="KUID S TV FILTER" />
+      </div>
+
       <!-- 키비주얼 테크니컬 옵티컬 포커스 링 -->
       <div class="focus-ring"></div>
       <!-- 촬영 플래시 효과 -->
@@ -220,11 +225,11 @@
   </div>
 
   <!-- 스크립트 로드 (모바일 캐시 방지 버전) -->
-  <script src="js/config.js?v=20260830_5"></script>
-  <script src="js/camera.js?v=20260830_5"></script>
-  <script src="js/audio.js?v=20260830_5"></script>
-  <script src="js/filterRenderer.js?v=20260830_5"></script>
-  <script src="js/share.js?v=20260830_5"></script>
-  <script src="js/app.js?v=20260830_5"></script>
+  <script src="js/config.js?v=20260830_7"></script>
+  <script src="js/camera.js?v=20260830_7"></script>
+  <script src="js/audio.js?v=20260830_7"></script>
+  <script src="js/filterRenderer.js?v=20260830_7"></script>
+  <script src="js/share.js?v=20260830_7"></script>
+  <script src="js/app.js?v=20260830_7"></script>
 </body>
 </html>

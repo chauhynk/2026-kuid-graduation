@@ -143,19 +143,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   document.addEventListener('pointerdown', startAudioOnFirstInteraction);
 
-  // 사운드 토글 버튼
+  // 사운드 토글 버튼 (원클릭 즉시 재생 및 정지)
   soundBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const isUnmuted = audio.toggleMute();
-    if (isUnmuted) {
+    const isPlaying = audio.toggle();
+    if (isPlaying) {
       soundStatus.textContent = 'ON';
       soundBtn.classList.remove('active');
-      audio.play();
-      showToast('BGM ON // STANDBY AUDIO');
+      showToast('BGM ON // PLAYING');
     } else {
       soundStatus.textContent = 'OFF';
       soundBtn.classList.add('active');
-      showToast('BGM MUTED');
+      showToast('BGM OFF // MUTED');
     }
   });
 
