@@ -65,6 +65,30 @@ class CameraController {
   }
 
   /**
+   * 카메라 스트림 상태 점검 및 재개 (멈춤 방지)
+   */
+  async resumeCamera() {
+    try {
+      if (this.stream && this.stream.active) {
+        const tracks = this.stream.getVideoTracks();
+        const activeTracks = tracks.filter(t => t.readyState === 'live' && t.enabled);
+        
+        if (activeTracks.length > 0) {
+          if (this.video.paused) {
+            await this.video.play();
+          }
+          this.isReady = true;
+          return true;
+        }
+      }
+      return await this.startCamera(this.facingMode);
+    } catch (err) {
+      console.warn('카메라 스트림 재개 실패, 재시작 시도:', err);
+      return await this.startCamera(this.facingMode);
+    }
+  }
+
+  /**
    * 스트림 중지
    */
   stopStream() {
