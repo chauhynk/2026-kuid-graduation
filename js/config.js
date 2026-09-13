@@ -22,15 +22,16 @@ window.APP_CONFIG = {
     { id: "e", title: "과제 시작 전 STANDBY", tag: "MISSION E" }
   ],
 
-  // 🖼️ 프레임 설정: 사용자가 전달한 공식 키비주얼 단일 적용
+  // 🖼️ 프레임 설정: 새로 전달된 new_standby_frame_v2 단일 적용 (실시간 날짜/시간 반영)
   frames: [
     {
-      id: "kuid_standby_kv",
-      name: "STANDBY KV",
+      id: "new_standby_frame_v2",
+      name: "STANDBY V2",
       code: "01",
-      src: "assets/frames/kuid_standby_frame.png",
-      description: "KUID STANDBY OFFICIAL KEY VISUAL",
-      colorEffect: "none"
+      src: "assets/frames/new_standby_frame_v2.png",
+      description: "2026 KUID STANDBY OFFICIAL FRAME",
+      colorEffect: "none",
+      hasRealtimeTimestamp: true
     }
   ],
 

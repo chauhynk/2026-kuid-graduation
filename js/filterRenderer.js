@@ -186,6 +186,45 @@ class FilterRenderer {
       ctx.drawImage(frameImg, 0, 0, cw, ch);
     }
 
+    // 3. 우측 실시간 년도/월/일/시간 반영 (YYYY.MM.DD.  HH:mm)
+    this.renderRealtimeTimestamp(ctx, cw, ch);
+
+    ctx.restore();
+  }
+
+  /**
+   * 우측 세로 실시간 타임스탬프 렌더링 (YYYY.MM.DD.  HH:mm)
+   */
+  renderRealtimeTimestamp(ctx, cw, ch) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    // 포맷: 2026.09.13.  20:07
+    const dateStr = `${year}.${month}.${day}.  ${hours}:${minutes}`;
+
+    ctx.save();
+    // 1080 x 1920 해상도 기준: X = 1005px (cw * 0.9305), Y = 962px (ch * 0.501)
+    const posX = cw * 0.9305;
+    const posY = ch * 0.501;
+
+    ctx.translate(posX, posY);
+    ctx.rotate(Math.PI / 2); // 90도 시계방향 회전
+
+    const fontSize = Math.round(cw * 0.0407); // 1080px 기준 약 44px
+    ctx.font = `700 ${fontSize}px "Noto Sans", "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    if (ctx.letterSpacing !== undefined) {
+      ctx.letterSpacing = '1px';
+    }
+
+    ctx.fillText(dateStr, 0, 0);
     ctx.restore();
   }
 
