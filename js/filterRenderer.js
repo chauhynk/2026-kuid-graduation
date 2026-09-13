@@ -29,12 +29,27 @@ class FilterRenderer {
 
     this.initCanvasSize();
     this.preloadFrames();
+
+    window.addEventListener('resize', () => {
+      this.initCanvasSize();
+    });
   }
 
   /**
-   * 캔버스 기본 해상도 초기화
+   * 캔버스 기본 해상도 초기화 (모바일 기기 프레임에 맞춰 꽉 차도록 비율 최적화)
    */
   initCanvasSize() {
+    const container = this.canvas.parentElement || document.body;
+    const rect = container.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      const screenRatio = rect.width / rect.height;
+      // 세로형 모바일 화면 (비율 0.75 이하)일 때 기기 종횡비에 1:1로 맞춤
+      if (screenRatio <= 0.75) {
+        this.canvas.width = 1080;
+        this.canvas.height = Math.round(1080 / screenRatio);
+        return;
+      }
+    }
     this.canvas.width = this.targetWidth;
     this.canvas.height = this.targetHeight;
   }
