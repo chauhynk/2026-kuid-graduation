@@ -467,12 +467,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  btnRetake.addEventListener('click', () => {
-    if (previewVideo.src) {
-      previewVideo.pause();
-    }
+  const closeResultModal = async () => {
     resultModal.classList.remove('active');
-  });
+
+    if (previewVideo) {
+      previewVideo.pause();
+      try {
+        previewVideo.removeAttribute('src');
+        previewVideo.load();
+      } catch (e) {}
+    }
+
+    isCapturing = false;
+    isRecording = false;
+
+    try {
+      await camera.resumeCamera();
+    } catch (e) {
+      console.warn('카메라 재개 실패:', e);
+    }
+
+    if (!renderer.isRunning) {
+      renderer.start(camera.isFrontCamera());
+    }
+  };
+
+  btnRetake.addEventListener('click', closeResultModal);
 
   btnCopyHashtags.addEventListener('click', async () => {
     const ok = await share.copyHashtags();
@@ -499,10 +519,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   [resultModal, eventModal].forEach(modal => {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
-        if (previewVideo.src) {
-          previewVideo.pause();
+        if (modal === resultModal) {
+          closeResultModal();
+        } else {
+          modal.classList.remove('active');
         }
-        modal.classList.remove('active');
       }
     });
   });
