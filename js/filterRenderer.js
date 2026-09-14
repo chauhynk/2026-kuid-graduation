@@ -222,13 +222,15 @@ class FilterRenderer {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
 
-    // 포맷: 2026.09.14 11:50
-    const dateStr = `${year}.${month}.${day} ${hours}:${minutes}`;
+    // 피그마 디자인 포맷: 2026:09:14:13:08 (콜론 구분 16자 모노스페이스)
+    const dateStr = `${year}:${month}:${day}:${hours}:${minutes}`;
 
     ctx.save();
-    // 1080 x 1920 해상도 기준: X = 1005px (cw * 0.9305), Y = 962px (ch * 0.501)
-    const posX = cw * 0.9305;
-    const posY = ch * 0.501;
+    // 피그마 Frame 43 (1080 x 1920) 실측 좌표:
+    // Left: 974px, Right: 66px, Box Width: 40px -> 중심 X = 974 + 20 = 994px
+    // Top: 768px, Bottom: 768px, Box Height: 384px -> 중심 Y = 768 + 192 = 960px (정중앙)
+    const posX = cw * (994 / 1080);
+    const posY = ch * (960 / 1920);
 
     ctx.translate(posX, posY);
     ctx.rotate(Math.PI / 2); // 90도 시계방향 회전
