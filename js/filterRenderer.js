@@ -222,8 +222,8 @@ class FilterRenderer {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
 
-    // 포맷: 2026.09.13.  20:07
-    const dateStr = `${year}.${month}.${day}.  ${hours}:${minutes}`;
+    // 포맷: 2026.09.14 11:50
+    const dateStr = `${year}.${month}.${day} ${hours}:${minutes}`;
 
     ctx.save();
     // 1080 x 1920 해상도 기준: X = 1005px (cw * 0.9305), Y = 962px (ch * 0.501)
