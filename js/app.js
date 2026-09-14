@@ -520,11 +520,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 18. 졸업전시 주제 및 컨셉 소개 모달 (KUID GRADUATION 버튼)
   const closeAboutModalTopBtn = document.getElementById('close-about-modal-top');
+  const scrollIndicatorBtn = document.querySelector('.about-scroll-indicator');
 
   const openAboutModal = () => {
-    const sheet = aboutModal.querySelector('.about-modal-sheet');
-    if (sheet) sheet.scrollTop = 0;
     aboutModal.classList.add('active');
+    const sheet = aboutModal.querySelector('.about-modal-sheet');
+    if (sheet) {
+      sheet.scrollTop = 0;
+      setTimeout(() => {
+        sheet.scrollTop = 0;
+      }, 50);
+    }
   };
   brandBadge.addEventListener('click', openAboutModal);
 
@@ -534,6 +540,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   closeAboutModalBtn.addEventListener('click', closeAboutModal);
   if (closeAboutModalTopBtn) {
     closeAboutModalTopBtn.addEventListener('click', closeAboutModal);
+  }
+
+  if (scrollIndicatorBtn) {
+    scrollIndicatorBtn.addEventListener('click', () => {
+      const sheet = aboutModal.querySelector('.about-modal-sheet');
+      if (sheet) {
+        sheet.scrollTo({
+          top: window.innerHeight * 0.85,
+          behavior: 'smooth'
+        });
+      }
+    });
   }
 
   btnAboutInstagram.addEventListener('click', () => {

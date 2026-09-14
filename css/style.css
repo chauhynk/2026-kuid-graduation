@@ -762,23 +762,28 @@ html, body {
    7. 졸전 소개 및 컨셉 모달 (Full Screen Poster & Sticky Scroll Overlay)
    ========================================================================== */
 .modal-overlay-about {
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(0, 0, 0, 0.95);
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  padding: 0 !important;
 }
 
 .about-modal-sheet {
+  display: block !important; /* flex 제거하고 순수 block 스크롤 컨테이너로 설정 */
   padding: 0 !important;
   gap: 0 !important;
+  width: 100% !important;
   height: 100vh !important;
   height: 100dvh !important;
   max-height: 100dvh !important;
   background: #000000 !important;
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow-x: hidden !important;
   overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch !important;
   scroll-behavior: smooth;
-  position: relative;
+  position: relative !important;
 }
 
 /* 상단 플로팅 고정 헤더 */
@@ -787,14 +792,16 @@ html, body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 30;
+  z-index: 40;
+  height: 60px;
+  margin-bottom: -60px; /* 포스터를 밀어내지 않고 위에 플로팅 */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: max(calc(var(--safe-top) + 12px), 16px) 18px 14px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 70%, transparent 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  padding: max(calc(var(--safe-top) + 10px), 14px) 18px 10px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   pointer-events: auto;
 }
 
@@ -809,6 +816,7 @@ html, body {
   font-weight: 900;
   letter-spacing: 1px;
   color: #FFFFFF;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .about-header-tag {
@@ -816,13 +824,14 @@ html, body {
   font-size: 11px;
   font-weight: 700;
   color: var(--kv-green);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .about-close-circle-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   border: 1px solid var(--border-white);
   color: #FFFFFF;
   font-size: 22px;
@@ -831,15 +840,16 @@ html, body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
   transition: all 0.2s ease;
 }
 
 .about-close-circle-btn:active {
   transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* 1. 화면 꽉 차는 포스터 영역 (Sticky 고정 배경) */
+/* 1. 화면 꽉 차는 포스터 영역 (Sticky 고정 배경 - 처음에 이것만 보임) */
 .about-poster-hero {
   position: sticky;
   top: 0;
@@ -867,7 +877,7 @@ html, body {
 /* 스크롤 유도 인디케이터 */
 .about-scroll-indicator {
   position: absolute;
-  bottom: 95px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
@@ -875,26 +885,28 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 6px 14px;
-  border-radius: 20px;
-  pointer-events: none;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 8px 18px;
+  border-radius: 24px;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
   animation: floatIndicator 2s ease-in-out infinite;
 }
 
 .about-scroll-indicator .scroll-text {
   font-family: var(--font-mono);
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 700;
   color: #FFFFFF;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
 }
 
 .about-scroll-indicator .scroll-chevron {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--kv-green);
   line-height: 1;
 }
@@ -940,22 +952,22 @@ html, body {
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* 2. 스크롤 올릴 때 포스터 위로 덮이며 올라오는 서문 오버레이 시트 */
+/* 2. 스크롤 올릴 때 포스터 위로 덮이며 올라오는 서문 오버레이 시트 (초기에는 화면 아래 숨겨짐) */
 .about-overlay-sheet {
   position: relative;
-  z-index: 15;
-  margin-top: -80px; /* 포스터 하단 살짝 걸치며 피크 */
-  background: rgba(8, 8, 12, 0.94);
+  z-index: 20;
+  margin-top: 0; /* 100dvh 포스터 바로 밑에 위치하여 초기 화면에서는 보이지 않음 */
+  background: rgba(6, 6, 10, 0.95);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-top: 2px solid var(--border-white);
   border-radius: 24px 24px 0 0;
-  padding: 16px 20px calc(var(--safe-bottom) + 36px);
+  padding: 24px 20px calc(var(--safe-bottom) + 40px);
   box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.98);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-height: 75vh;
+  min-height: 80vh;
 }
 
 .sheet-drag-pill {
@@ -963,16 +975,16 @@ html, body {
   height: 4px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 2px;
-  margin: 0 auto 6px;
+  margin: 0 auto 10px;
 }
 
 .about-text-card {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border-subtle);
-  padding: 18px 16px;
+  padding: 20px 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   border-radius: 2px;
 }
 
