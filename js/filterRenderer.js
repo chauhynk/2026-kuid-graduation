@@ -74,6 +74,10 @@ class FilterRenderer {
       });
     });
 
+    if (document.fonts && document.fonts.ready) {
+      promises.push(document.fonts.ready);
+    }
+
     await Promise.all(promises);
   }
 
@@ -230,7 +234,7 @@ class FilterRenderer {
     ctx.rotate(Math.PI / 2); // 90도 시계방향 회전
 
     const fontSize = Math.round(cw * 0.0407); // 1080px 기준 약 44px
-    ctx.font = `700 ${fontSize}px "Noto Sans", "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.font = `600 ${fontSize}px "ibm-plex-mono", "Noto Sans", monospace, sans-serif`;
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
