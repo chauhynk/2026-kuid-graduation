@@ -233,14 +233,14 @@ class FilterRenderer {
     ctx.translate(posX, posY);
     ctx.rotate(Math.PI / 2); // 90도 시계방향 회전
 
-    const fontSize = Math.round(cw * 0.0407); // 1080px 기준 약 44px
-    ctx.font = `600 ${fontSize}px "ibm-plex-mono", "Noto Sans", monospace, sans-serif`;
+    const fontSize = Math.round(cw * (40 / 1080)); // 피그마 규격: 40px (1080px 기준)
+    ctx.font = `500 ${fontSize}px "ibm-plex-mono", "IBM Plex Mono", monospace, sans-serif`;
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
     if (ctx.letterSpacing !== undefined) {
-      ctx.letterSpacing = '1px';
+      ctx.letterSpacing = '0px'; // 피그마 규격: normal (0px)
     }
 
     ctx.fillText(dateStr, 0, 0);
