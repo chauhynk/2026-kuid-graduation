@@ -520,7 +520,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 18. 졸업전시 주제 및 컨셉 소개 모달 (KUID GRADUATION 버튼)
   const closeAboutModalTopBtn = document.getElementById('close-about-modal-top');
-  const scrollIndicatorBtn = document.querySelector('.about-scroll-indicator');
+  const scrollToStatementBtn = document.getElementById('scroll-to-statement-btn');
 
   const openAboutModal = () => {
     aboutModal.classList.add('active');
@@ -542,12 +542,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     closeAboutModalTopBtn.addEventListener('click', closeAboutModal);
   }
 
-  if (scrollIndicatorBtn) {
-    scrollIndicatorBtn.addEventListener('click', () => {
+  if (scrollToStatementBtn) {
+    scrollToStatementBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const page2 = document.getElementById('about-page-2');
       const sheet = aboutModal.querySelector('.about-modal-sheet');
-      if (sheet) {
+      if (page2) {
+        page2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (sheet) {
         sheet.scrollTo({
-          top: window.innerHeight * 0.85,
+          top: window.innerHeight,
           behavior: 'smooth'
         });
       }

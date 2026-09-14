@@ -30,7 +30,7 @@
   <meta http-equiv="Expires" content="0" />
 
   <!-- 스타일시트 (모바일 캐시 방지 버전) -->
-  <link rel="stylesheet" href="css/style.css?v=20260914_MODAL_D9D9D9_1" />
+  <link rel="stylesheet" href="css/style.css?v=20260914_KUID_GRAD_PAGES_1" />
 </head>
 <body>
   <div id="app">
@@ -209,57 +209,44 @@
       </div>
     </div>
 
-    <!-- 7. 졸전 소개 및 컨셉 모달 (Full Screen Poster & Sticky Scroll Overlay) -->
+    <!-- 7. 졸전 소개 및 컨셉 모달 (KUID GRADUATION: KUID GRAD_1 & KUID GRAD_2) -->
     <div class="modal-overlay modal-overlay-about" id="about-modal">
       <div class="modal-sheet about-modal-sheet">
-        <!-- 상단 플로팅 고정 헤더 -->
-        <div class="about-floating-header">
-          <div class="about-header-info">
-            <span class="about-header-title">2026 KUID GRADUATION</span>
-            <span class="about-header-tag">● STANDBY</span>
+        <!-- 상단 고정 닫기 버튼 -->
+        <button class="about-close-circle-btn" id="close-about-modal-top" title="닫기" aria-label="닫기">&times;</button>
+
+        <!-- 1페이지: 포스터 레이아웃 (KUID GRAD_1) -->
+        <section class="about-page" id="about-page-1">
+          <div class="about-image-wrapper">
+            <img
+              src="assets/images/KUID%20GRAD_1.png"
+              id="about-poster-img"
+              alt="2026 KUID GRADUATION SHOW 포스터"
+              class="about-page-img"
+            />
+            <!-- 이미지 하단 세모(▼) 위치와 정확히 일치하는 터치/클릭 버튼 -->
+            <button
+              class="about-triangle-btn"
+              id="scroll-to-statement-btn"
+              aria-label="서문으로 스크롤"
+              title="서문으로 스크롤"
+            ></button>
           </div>
-          <button class="about-close-circle-btn" id="close-about-modal-top" title="닫기">&times;</button>
-        </div>
+        </section>
 
-        <!-- 1. 화면에 꽉 차는 고정 포스터 히어로 -->
-        <div class="about-poster-hero">
-          <img
-            src="assets/images/KUID%20STANDBY%20POSTER.png"
-            id="about-poster-img"
-            alt="2026 KUID GRADUATION SHOW 포스터"
-            class="about-poster-full"
-            onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src='assets/images/poster.png';}else{this.style.display='none';document.getElementById('poster-placeholder').style.display='flex';}"
-          />
-          <div id="poster-placeholder" class="poster-placeholder" style="display: none;">
-            <span class="placeholder-tag">[ OFFICIAL POSTER IMAGE ]</span>
-            <span class="placeholder-desc">assets/images/KUID STANDBY POSTER.png</span>
-          </div>
-          <button class="about-scroll-indicator" id="scroll-to-statement-btn" aria-label="서문 보기" title="서문 보기">
-            <span class="scroll-chevron">▼</span>
-          </button>
-        </div>
-
-        <!-- 2. 스크롤을 올릴 때 포스터 위로 오버레이되는 서문 시트 -->
-        <div class="about-overlay-sheet">
-          <div class="sheet-drag-pill"></div>
-
-          <div class="about-text-card">
-            <div class="about-subtitle">2026 건국대학교 산업디자인학과 졸업전시 &lt;STANDBY&gt;</div>
-            <div class="about-desc">
-              <p>
-                2026 산업디자인학과 졸업전시 &lt;Stanby&gt;는 화면조정시간의 화면처럼, 세상을 향해 송출되기 직전의 모습을 담는다. 화면이 잠시 멈춰 선 이 순간에는 지금껏 축적해 온 시간과 시작을 앞둔 기대가 함께 머문다.
-              </p>
-              <p>
-                38명의 졸업생이 포착한 서로 다른 작품들은 하나의 주파수 안에서 저마다의 프로그램이 된다. 각자의 속도와 시선을 잃지 않은 채 선명한 장면을 만들고 이어지며 산업디자인학과라는 하나의 채널을 이룬다. 그렇게 모인 장면들은 서로의 이야기를 드러내면서도 하나의 흐름을 만들고, 익숙한 세계를 새로운 시선으로 바라보게 한다. 각자의 작업에 담긴 질문과 태도는 한 채널 안에서 새로운 감각을 함께 송출하며 세상과 감각적이고 유희적인 관계를 맺기 시작한다.
-              </p>
-              <p class="about-highlight">
-                우리의 채널이 마침내 시작되기까지,<br />
-                <strong>Stanby··· Beep!</strong>
-              </p>
-            </div>
+        <!-- 2페이지: 서문 레이아웃 (KUID GRAD_2) -->
+        <section class="about-page" id="about-page-2">
+          <div class="about-image-wrapper">
+            <img
+              src="assets/images/KUID%20GRAD_2.png"
+              id="about-statement-img"
+              alt="2026 KUID GRADUATION SHOW 서문"
+              class="about-page-img"
+            />
           </div>
 
-          <div class="btn-group" style="margin-top: 14px;">
+          <!-- 하단 공식 링크 및 닫기 버튼 -->
+          <div class="about-bottom-actions">
             <button class="primary-btn" id="btn-about-instagram">
               <span>OPEN OFFICIAL INSTAGRAM (@kuid_graduation)</span>
             </button>
@@ -267,7 +254,7 @@
               <span>CLOSE</span>
             </button>
           </div>
-        </div>
+        </section>
       </div>
     </div>
 
@@ -276,10 +263,10 @@
   </div>
 
   <!-- 스크립트 로드 (모바일 캐시 방지 버전) -->
-  <script src="js/config.js?v=20260914_MODAL_D9D9D9_1"></script>
-  <script src="js/camera.js?v=20260914_MODAL_D9D9D9_1"></script>
-  <script src="js/filterRenderer.js?v=20260914_MODAL_D9D9D9_1"></script>
-  <script src="js/share.js?v=20260914_MODAL_D9D9D9_1"></script>
-  <script src="js/app.js?v=20260914_MODAL_D9D9D9_1"></script>
+  <script src="js/config.js?v=20260914_KUID_GRAD_PAGES_1"></script>
+  <script src="js/camera.js?v=20260914_KUID_GRAD_PAGES_1"></script>
+  <script src="js/filterRenderer.js?v=20260914_KUID_GRAD_PAGES_1"></script>
+  <script src="js/share.js?v=20260914_KUID_GRAD_PAGES_1"></script>
+  <script src="js/app.js?v=20260914_KUID_GRAD_PAGES_1"></script>
 </body>
 </html>
