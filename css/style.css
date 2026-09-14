@@ -759,36 +759,159 @@ html, body {
 }
 
 /* ==========================================================================
-   7. 졸전 소개 및 컨셉 모달 (About Exhibition Modal)
+   7. 졸전 소개 및 컨셉 모달 (Full Screen Poster & Sticky Scroll Overlay)
    ========================================================================== */
-.about-content-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.modal-overlay-about {
+  background: rgba(0, 0, 0, 0.92);
 }
 
-.about-poster-container {
-  width: 100%;
-  background: #000000;
-  border: 1px solid var(--border-white);
-  border-radius: 2px;
-  overflow: hidden;
+.about-modal-sheet {
+  padding: 0 !important;
+  gap: 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  background: #000000 !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+/* 상단 플로팅 고정 헤더 */
+.about-floating-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  min-height: 180px;
+  padding: max(calc(var(--safe-top) + 12px), 16px) 18px 14px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 70%, transparent 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: auto;
 }
 
-.about-poster-img {
+.about-header-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-header-title {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #FFFFFF;
+}
+
+.about-header-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--kv-green);
+}
+
+.about-close-circle-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--border-white);
+  color: #FFFFFF;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.about-close-circle-btn:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 1. 화면 꽉 차는 포스터 영역 (Sticky 고정 배경) */
+.about-poster-hero {
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-height: 48vh;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.about-poster-full {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   display: block;
 }
 
+/* 스크롤 유도 인디케이터 */
+.about-scroll-indicator {
+  position: absolute;
+  bottom: 95px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 14px;
+  border-radius: 20px;
+  pointer-events: none;
+  animation: floatIndicator 2s ease-in-out infinite;
+}
+
+.about-scroll-indicator .scroll-text {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 1.2px;
+}
+
+.about-scroll-indicator .scroll-chevron {
+  font-size: 10px;
+  color: var(--kv-green);
+  line-height: 1;
+}
+
+@keyframes floatIndicator {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(5px);
+  }
+}
+
 .poster-placeholder {
   width: 100%;
-  min-height: 180px;
+  height: 100%;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -802,7 +925,6 @@ html, body {
     transparent 10px,
     transparent 20px
   );
-  border: 1px dashed var(--border-subtle);
 }
 
 .placeholder-tag {
@@ -818,31 +940,58 @@ html, body {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.about-text-card {
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid var(--border-subtle);
-  padding: 16px;
+/* 2. 스크롤 올릴 때 포스터 위로 덮이며 올라오는 서문 오버레이 시트 */
+.about-overlay-sheet {
+  position: relative;
+  z-index: 15;
+  margin-top: -80px; /* 포스터 하단 살짝 걸치며 피크 */
+  background: rgba(8, 8, 12, 0.94);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 24px 24px 0 0;
+  padding: 16px 20px calc(var(--safe-bottom) + 36px);
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.98);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
+  min-height: 75vh;
+}
+
+.sheet-drag-pill {
+  width: 44px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  margin: 0 auto 6px;
+}
+
+.about-text-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-subtle);
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 2px;
 }
 
 .about-subtitle {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.5px;
   color: #FFFFFF;
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 8px;
+  padding-bottom: 10px;
 }
 
 .about-desc {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-size: 12.5px;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.88);
+  gap: 14px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.9);
   word-break: keep-all;
 }
 
@@ -852,7 +1001,7 @@ html, body {
 
 .about-highlight {
   border-left: 2px solid var(--kv-green);
-  padding-left: 10px;
+  padding-left: 12px;
   color: #FFFFFF;
   margin-top: 4px;
 }

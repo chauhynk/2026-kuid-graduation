@@ -519,14 +519,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 18. 졸업전시 주제 및 컨셉 소개 모달 (KUID GRADUATION 버튼)
+  const closeAboutModalTopBtn = document.getElementById('close-about-modal-top');
+
   const openAboutModal = () => {
+    const sheet = aboutModal.querySelector('.about-modal-sheet');
+    if (sheet) sheet.scrollTop = 0;
     aboutModal.classList.add('active');
   };
   brandBadge.addEventListener('click', openAboutModal);
 
-  closeAboutModalBtn.addEventListener('click', () => {
+  const closeAboutModal = () => {
     aboutModal.classList.remove('active');
-  });
+  };
+  closeAboutModalBtn.addEventListener('click', closeAboutModal);
+  if (closeAboutModalTopBtn) {
+    closeAboutModalTopBtn.addEventListener('click', closeAboutModal);
+  }
 
   btnAboutInstagram.addEventListener('click', () => {
     share.openInstagramAccount();

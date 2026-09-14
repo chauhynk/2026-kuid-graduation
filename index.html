@@ -30,7 +30,7 @@
   <meta http-equiv="Expires" content="0" />
 
   <!-- 스타일시트 (모바일 캐시 방지 버전) -->
-  <link rel="stylesheet" href="css/style.css?v=20260914_ABOUT_MODAL_1" />
+  <link rel="stylesheet" href="css/style.css?v=20260914_OVERLAY_POSTER_1" />
 </head>
 <body>
   <div id="app">
@@ -209,31 +209,41 @@
       </div>
     </div>
 
-    <!-- 7. 졸전 소개 및 컨셉 모달 (Exhibition About Modal) -->
-    <div class="modal-overlay" id="about-modal">
-      <div class="modal-sheet">
-        <div class="modal-header">
-          <h3 class="modal-title">2026 KUID GRADUATION // STANDBY</h3>
-          <span class="modal-tag-green">● ABOUT SHOW</span>
+    <!-- 7. 졸전 소개 및 컨셉 모달 (Full Screen Poster & Sticky Scroll Overlay) -->
+    <div class="modal-overlay modal-overlay-about" id="about-modal">
+      <div class="modal-sheet about-modal-sheet">
+        <!-- 상단 플로팅 고정 헤더 -->
+        <div class="about-floating-header">
+          <div class="about-header-info">
+            <span class="about-header-title">2026 KUID GRADUATION</span>
+            <span class="about-header-tag">● STANDBY</span>
+          </div>
+          <button class="about-close-circle-btn" id="close-about-modal-top" title="닫기">&times;</button>
         </div>
 
-        <div class="about-content-wrapper">
-          <!-- 졸전 포스터 이미지 영역 -->
-          <div class="about-poster-container">
-            <img
-              src="assets/images/KUID%20STANDBY%20POSTER.png"
-              id="about-poster-img"
-              alt="2026 KUID GRADUATION SHOW 포스터"
-              class="about-poster-img"
-              onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src='assets/images/poster.png';}else{this.style.display='none';document.getElementById('poster-placeholder').style.display='flex';}"
-            />
-            <div id="poster-placeholder" class="poster-placeholder" style="display: none;">
-              <span class="placeholder-tag">[ OFFICIAL POSTER IMAGE ]</span>
-              <span class="placeholder-desc">assets/images/KUID STANDBY POSTER.png</span>
-            </div>
+        <!-- 1. 화면에 꽉 차는 고정 포스터 히어로 -->
+        <div class="about-poster-hero">
+          <img
+            src="assets/images/KUID%20STANDBY%20POSTER.png"
+            id="about-poster-img"
+            alt="2026 KUID GRADUATION SHOW 포스터"
+            class="about-poster-full"
+            onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src='assets/images/poster.png';}else{this.style.display='none';document.getElementById('poster-placeholder').style.display='flex';}"
+          />
+          <div id="poster-placeholder" class="poster-placeholder" style="display: none;">
+            <span class="placeholder-tag">[ OFFICIAL POSTER IMAGE ]</span>
+            <span class="placeholder-desc">assets/images/KUID STANDBY POSTER.png</span>
           </div>
+          <div class="about-scroll-indicator">
+            <span class="scroll-text">SCROLL TO READ STATEMENT</span>
+            <span class="scroll-chevron">▼</span>
+          </div>
+        </div>
 
-          <!-- 졸전 소개문 카드 -->
+        <!-- 2. 스크롤을 올릴 때 포스터 위로 오버레이되는 서문 시트 -->
+        <div class="about-overlay-sheet">
+          <div class="sheet-drag-pill"></div>
+
           <div class="about-text-card">
             <div class="about-subtitle">2026 건국대학교 산업디자인학과 졸업전시 &lt;STANDBY&gt;</div>
             <div class="about-desc">
@@ -249,15 +259,15 @@
               </p>
             </div>
           </div>
-        </div>
 
-        <div class="btn-group" style="margin-top: 8px;">
-          <button class="primary-btn" id="btn-about-instagram">
-            <span>OPEN OFFICIAL INSTAGRAM (@kuid_graduation)</span>
-          </button>
-          <button class="secondary-btn" id="close-about-modal">
-            <span>CLOSE</span>
-          </button>
+          <div class="btn-group" style="margin-top: 14px;">
+            <button class="primary-btn" id="btn-about-instagram">
+              <span>OPEN OFFICIAL INSTAGRAM (@kuid_graduation)</span>
+            </button>
+            <button class="secondary-btn" id="close-about-modal">
+              <span>CLOSE</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -267,10 +277,10 @@
   </div>
 
   <!-- 스크립트 로드 (모바일 캐시 방지 버전) -->
-  <script src="js/config.js?v=20260914_POSTER_LOADED_1"></script>
-  <script src="js/camera.js?v=20260914_POSTER_LOADED_1"></script>
-  <script src="js/filterRenderer.js?v=20260914_POSTER_LOADED_1"></script>
-  <script src="js/share.js?v=20260914_POSTER_LOADED_1"></script>
-  <script src="js/app.js?v=20260914_POSTER_LOADED_1"></script>
+  <script src="js/config.js?v=20260914_OVERLAY_POSTER_1"></script>
+  <script src="js/camera.js?v=20260914_OVERLAY_POSTER_1"></script>
+  <script src="js/filterRenderer.js?v=20260914_OVERLAY_POSTER_1"></script>
+  <script src="js/share.js?v=20260914_OVERLAY_POSTER_1"></script>
+  <script src="js/app.js?v=20260914_OVERLAY_POSTER_1"></script>
 </body>
 </html>
