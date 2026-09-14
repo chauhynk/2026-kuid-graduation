@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const eventModal = document.getElementById('event-modal');
   const closeEventModalBtn = document.getElementById('close-event-modal');
   const btnGoInstagram = document.getElementById('btn-go-instagram');
+  const aboutModal = document.getElementById('about-modal');
+  const closeAboutModalBtn = document.getElementById('close-about-modal');
+  const btnAboutInstagram = document.getElementById('btn-about-instagram');
   const toastEl = document.getElementById('toast');
 
   // 컨트롤러 인스턴스
@@ -501,12 +504,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 17. 이벤트 안내 모달
+  // 17. 이벤트 안내 모달 (GUIDE 버튼)
   const openEventModal = () => {
     eventModal.classList.add('active');
   };
   eventInfoBtn.addEventListener('click', openEventModal);
-  brandBadge.addEventListener('click', openEventModal);
 
   closeEventModalBtn.addEventListener('click', () => {
     eventModal.classList.remove('active');
@@ -516,7 +518,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     share.openInstagramAccount();
   });
 
-  [resultModal, eventModal].forEach(modal => {
+  // 18. 졸업전시 주제 및 컨셉 소개 모달 (KUID GRADUATION 버튼)
+  const openAboutModal = () => {
+    aboutModal.classList.add('active');
+  };
+  brandBadge.addEventListener('click', openAboutModal);
+
+  closeAboutModalBtn.addEventListener('click', () => {
+    aboutModal.classList.remove('active');
+  });
+
+  btnAboutInstagram.addEventListener('click', () => {
+    share.openInstagramAccount();
+  });
+
+  // 모달 배경(바깥 영역) 클릭 시 닫기
+  [resultModal, eventModal, aboutModal].forEach(modal => {
+    if (!modal) return;
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         if (modal === resultModal) {
