@@ -269,7 +269,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 10. 화면 터치 초점 링 애니메이션
+  // 10. 화면 터치 초점 링 애니메이션 (원형 스트로크)
+  let focusRingTimer = null;
   canvas.addEventListener('pointerdown', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -277,11 +278,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     focusRing.style.left = `${x}px`;
     focusRing.style.top = `${y}px`;
+    focusRing.classList.remove('active');
+    void focusRing.offsetWidth; // 애니메이션 즉시 재실행을 위한 리플로우
     focusRing.classList.add('active');
 
-    setTimeout(() => {
+    if (focusRingTimer) clearTimeout(focusRingTimer);
+    focusRingTimer = setTimeout(() => {
       focusRing.classList.remove('active');
-    }, 800);
+    }, 750);
   });
 
   // 11. 사진 촬영 로직
