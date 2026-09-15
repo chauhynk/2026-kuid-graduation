@@ -878,13 +878,13 @@ html, body {
   padding: 0;
 }
 
-/* 2페이지: 서문 + 버튼 */
+/* 2페이지: 서문 (포스터와 동일하게 화면에 꽉 차게 표시) */
 .about-page-2 {
-  padding: max(calc(var(--safe-top) + 8px), 12px) 16px max(calc(var(--safe-bottom) + 12px), 16px);
-  justify-content: space-between;
+  padding: 0;
+  justify-content: center;
 }
 
-/* 9:16 비율 이미지 래퍼 (기기 화면에 맞춰 완벽 정렬) */
+/* 9:16 비율 이미지 래퍼 (기기 화면에 맞춰 꽉 차게 정렬 - 1, 2페이지 동일) */
 .about-image-wrapper {
   position: relative;
   width: min(100vw, calc(100dvh * 9 / 16));
@@ -894,14 +894,6 @@ html, body {
   align-items: center;
   justify-content: center;
   background: #D8D9D9;
-}
-
-/* 2페이지 이미지 래퍼는 하단 버튼 높이를 감안하여 비율 조절 */
-.about-image-wrapper-page2 {
-  flex: 1;
-  min-height: 0;
-  width: min(100%, calc((100dvh - 110px) * 9 / 16));
-  height: min(calc(100dvh - 110px), calc(100vw * 16 / 9));
 }
 
 .about-page-img {
@@ -935,16 +927,4 @@ html, body {
 .about-triangle-btn:active {
   transform: translate(-50%, -50%) scale(0.9);
   opacity: 0.6;
-}
-
-/* 2페이지 하단 액션 버튼 그룹 */
-.about-bottom-actions {
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 440px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: #D8D9D9;
-  margin: 6px auto 0;
 }

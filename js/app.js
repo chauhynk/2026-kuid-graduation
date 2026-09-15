@@ -555,7 +555,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const closeAboutModal = () => {
     aboutModal.classList.remove('active');
   };
-  closeAboutModalBtn.addEventListener('click', closeAboutModal);
+  if (closeAboutModalBtn) {
+    closeAboutModalBtn.addEventListener('click', closeAboutModal);
+  }
   if (closeAboutModalTopBtn) {
     closeAboutModalTopBtn.addEventListener('click', closeAboutModal);
   }
@@ -638,9 +640,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  btnAboutInstagram.addEventListener('click', () => {
-    share.openInstagramAccount();
-  });
+  if (btnAboutInstagram) {
+    btnAboutInstagram.addEventListener('click', () => {
+      share.openInstagramAccount();
+    });
+  }
 
   // 모달 배경(바깥 영역) 클릭 시 닫기
   [resultModal, eventModal, aboutModal].forEach(modal => {
