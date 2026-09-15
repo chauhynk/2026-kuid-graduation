@@ -618,9 +618,32 @@ html, body {
   color: #FFFFFF !important;
 }
 
-/* 이벤트 가이드 상세 레이아웃 (GUIDE 모달: #F7F8F8 톤앤매너 반전 테마) */
+/* 이벤트 가이드 상세 레이아웃 (GUIDE 모달: #F7F8F8 톤앤매너 반전 테마 & 풀페이지 슬라이드업) */
+#event-modal {
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  padding: 0 !important;
+}
+
 #event-modal .modal-sheet {
   background: #F7F8F8 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 20px 20px calc(var(--safe-bottom) + 24px) 20px !important;
+  padding-top: max(calc(var(--safe-top) + 14px), 18px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+#event-modal .modal-header {
+  padding-right: 48px; /* 우측 상단 고정 'X' 버튼 공간 확보 */
+  min-height: 38px;
+  display: flex;
+  align-items: center;
 }
 
 .event-content-wrapper {

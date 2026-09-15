@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const hashtagText = document.getElementById('hashtag-display');
   const eventModal = document.getElementById('event-modal');
   const closeEventModalBtn = document.getElementById('close-event-modal');
+  const closeEventModalTopBtn = document.getElementById('close-event-modal-top');
   const btnGoInstagram = document.getElementById('btn-go-instagram');
   const aboutModal = document.getElementById('about-modal');
   const closeAboutModalBtn = document.getElementById('close-about-modal');
@@ -510,9 +511,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   eventInfoBtn.addEventListener('click', openEventModal);
 
-  closeEventModalBtn.addEventListener('click', () => {
+  const closeEventModal = () => {
     eventModal.classList.remove('active');
-  });
+  };
+  if (closeEventModalBtn) {
+    closeEventModalBtn.addEventListener('click', closeEventModal);
+  }
+  if (closeEventModalTopBtn) {
+    closeEventModalTopBtn.addEventListener('click', closeEventModal);
+  }
 
   btnGoInstagram.addEventListener('click', () => {
     share.openInstagramAccount();
