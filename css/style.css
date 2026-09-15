@@ -806,7 +806,7 @@ html, body {
   height: 100vh !important;
   height: 100dvh !important;
   max-height: 100dvh !important;
-  background: #F7F8F8 !important; /* KUID GRAD_1, 2 배경색과 완벽히 일치 */
+  background: #D8D9D9 !important; /* KUID GRAD_3, 4 배경색과 완벽히 일치 */
   border: none !important;
   border-radius: 0 !important;
   overflow: hidden !important; /* 1:1 드래그 스크롤을 막고 한번에 쑤욱 전환 */
@@ -867,7 +867,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #F7F8F8;
+  background: #D8D9D9;
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
@@ -893,7 +893,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F7F8F8;
+  background: #D8D9D9;
 }
 
 /* 2페이지 이미지 래퍼는 하단 버튼 높이를 감안하여 비율 조절 */
@@ -913,7 +913,7 @@ html, body {
   -webkit-user-drag: none;
 }
 
-/* KUID GRAD_1 하단 세모(▼) 인터랙티브 클릭/터치 영역 */
+/* KUID GRAD_3 하단 세모(▼) 인터랙티브 클릭/터치 영역 */
 .about-triangle-btn {
   position: absolute;
   top: 93.5%;
@@ -945,6 +945,6 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: #F7F8F8;
+  background: #D8D9D9;
   margin: 6px auto 0;
 }
