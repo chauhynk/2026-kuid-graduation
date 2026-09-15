@@ -518,19 +518,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     share.openInstagramAccount();
   });
 
-  // 18. 졸업전시 주제 및 컨셉 소개 모달 (KUID GRADUATION 버튼)
+  // 18. 졸업전시 주제 및 컨셉 소개 모달 (KUID GRADUATION 버튼 - 전체 페이지 슬라이드)
   const closeAboutModalTopBtn = document.getElementById('close-about-modal-top');
   const scrollToStatementBtn = document.getElementById('scroll-to-statement-btn');
+  const aboutPagesSlider = document.getElementById('about-pages-slider');
+
+  let currentAboutPage = 0;
+  let isAboutAnimating = false;
+
+  const setAboutPage = (pageIdx, animate = true) => {
+    if (pageIdx < 0) pageIdx = 0;
+    if (pageIdx > 1) pageIdx = 1;
+    currentAboutPage = pageIdx;
+    if (!aboutPagesSlider) return;
+
+    if (!animate) {
+      aboutPagesSlider.style.transition = 'none';
+      aboutPagesSlider.style.transform = `translateY(-${pageIdx * 100}%)`;
+      void aboutPagesSlider.offsetHeight; // force reflow
+    } else {
+      aboutPagesSlider.style.transition = 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)';
+      aboutPagesSlider.style.transform = `translateY(-${pageIdx * 100}%)`;
+      isAboutAnimating = true;
+      setTimeout(() => {
+        isAboutAnimating = false;
+      }, 560);
+    }
+  };
 
   const openAboutModal = () => {
+    setAboutPage(0, false);
     aboutModal.classList.add('active');
-    const sheet = aboutModal.querySelector('.about-modal-sheet');
-    if (sheet) {
-      sheet.scrollTop = 0;
-      setTimeout(() => {
-        sheet.scrollTop = 0;
-      }, 50);
-    }
   };
   brandBadge.addEventListener('click', openAboutModal);
 
@@ -546,18 +564,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     scrollToStatementBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const page2 = document.getElementById('about-page-2');
-      const sheet = aboutModal.querySelector('.about-modal-sheet');
-      if (page2) {
-        page2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else if (sheet) {
-        sheet.scrollTo({
-          top: window.innerHeight,
-          behavior: 'smooth'
-        });
-      }
+      setAboutPage(1, true);
     });
   }
+
+  // 모바일 터치 제스처: 조금만 쓸어올리거나 내려도 한번에 쑤욱 다음/이전 페이지로 전환
+  let touchStartY = null;
+  let touchStartX = null;
+  let touchHandled = false;
+
+  aboutModal.addEventListener('touchstart', (e) => {
+    if (!aboutModal.classList.contains('active')) return;
+    if (e.touches && e.touches.length === 1) {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+      touchHandled = false;
+    }
+  }, { passive: true });
+
+  aboutModal.addEventListener('touchmove', (e) => {
+    if (!aboutModal.classList.contains('active')) return;
+    if (touchStartY === null || touchHandled || isAboutAnimating) return;
+
+    const currentY = e.touches[0].clientY;
+    const currentX = e.touches[0].clientX;
+    const diffY = touchStartY - currentY; // 양수면 위로 쓸어올림(다음 페이지)
+    const diffX = touchStartX - currentX;
+
+    // 수직 스와이프 의도가 뚜렷할 때 (28px 이상 이동)
+    if (Math.abs(diffY) > 28 && Math.abs(diffY) > Math.abs(diffX)) {
+      touchHandled = true;
+      if (diffY > 0 && currentAboutPage === 0) {
+        // 위로 쓸어올림 -> 2페이지(서문)로 한번에 쑤욱 이동
+        setAboutPage(1, true);
+      } else if (diffY < 0 && currentAboutPage === 1) {
+        // 아래로 쓸어내림 -> 1페이지(포스터)로 한번에 쑤욱 이동
+        setAboutPage(0, true);
+      }
+    }
+  }, { passive: true });
+
+  aboutModal.addEventListener('touchend', () => {
+    touchStartY = null;
+    touchStartX = null;
+    touchHandled = false;
+  }, { passive: true });
+
+  // 마우스 휠 / 트랙패드 제스처: 휠 한 번에 전체 1페이지씩 쑤욱 이동
+  aboutModal.addEventListener('wheel', (e) => {
+    if (!aboutModal.classList.contains('active')) return;
+    e.preventDefault();
+    if (isAboutAnimating) return;
+
+    if (e.deltaY > 15 && currentAboutPage === 0) {
+      setAboutPage(1, true);
+    } else if (e.deltaY < -15 && currentAboutPage === 1) {
+      setAboutPage(0, true);
+    }
+  }, { passive: false });
+
+  // 키보드 방향키 제스처
+  window.addEventListener('keydown', (e) => {
+    if (!aboutModal.classList.contains('active')) return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault();
+      if (currentAboutPage === 0 && !isAboutAnimating) setAboutPage(1, true);
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (currentAboutPage === 1 && !isAboutAnimating) setAboutPage(0, true);
+    } else if (e.key === 'Escape') {
+      closeAboutModal();
+    }
+  });
 
   btnAboutInstagram.addEventListener('click', () => {
     share.openInstagramAccount();

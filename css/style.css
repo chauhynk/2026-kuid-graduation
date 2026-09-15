@@ -788,7 +788,7 @@ html, body {
 }
 
 /* ==========================================================================
-   7. 졸전 소개 및 컨셉 모달 (2-Page Scroll: KUID GRAD_1 & KUID GRAD_2)
+   7. 졸전 소개 및 컨셉 모달 (2-Page Fullpage Slide: KUID GRAD_1 & KUID GRAD_2)
    ========================================================================== */
 .modal-overlay-about {
   background: rgba(0, 0, 0, 0.85);
@@ -809,12 +809,9 @@ html, body {
   background: #F7F8F8 !important; /* KUID GRAD_1, 2 배경색과 완벽히 일치 */
   border: none !important;
   border-radius: 0 !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  scroll-behavior: smooth !important;
-  scroll-snap-type: y proximity;
+  overflow: hidden !important; /* 1:1 드래그 스크롤을 막고 한번에 쑤욱 전환 */
   position: relative !important;
+  touch-action: none; /* 제스처 충돌 방지 */
 }
 
 /* 상단 고정 닫기 버튼 */
@@ -844,11 +841,22 @@ html, body {
   color: #000000;
 }
 
-/* 각 페이지 컨테이너 */
+/* 전체 2페이지 슬라이더 컨테이너 (한번에 쑤욱 전환) */
+.about-pages-slider {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  transform: translateY(0%);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* 각 슬라이드 페이지 */
 .about-page {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100%;
+  flex: 0 0 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -856,7 +864,18 @@ html, body {
   background: #F7F8F8;
   position: relative;
   box-sizing: border-box;
-  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+/* 1페이지: 포스터 */
+.about-page-1 {
+  padding: 0;
+}
+
+/* 2페이지: 서문 + 버튼 */
+.about-page-2 {
+  padding: max(calc(var(--safe-top) + 8px), 12px) 16px max(calc(var(--safe-bottom) + 12px), 16px);
+  justify-content: space-between;
 }
 
 /* 9:16 비율 이미지 래퍼 (기기 화면에 맞춰 완벽 정렬) */
@@ -869,6 +888,14 @@ html, body {
   align-items: center;
   justify-content: center;
   background: #F7F8F8;
+}
+
+/* 2페이지 이미지 래퍼는 하단 버튼 높이를 감안하여 비율 조절 */
+.about-image-wrapper-page2 {
+  flex: 1;
+  min-height: 0;
+  width: min(100%, calc((100dvh - 110px) * 9 / 16));
+  height: min(calc(100dvh - 110px), calc(100vw * 16 / 9));
 }
 
 .about-page-img {
@@ -906,13 +933,12 @@ html, body {
 
 /* 2페이지 하단 액션 버튼 그룹 */
 .about-bottom-actions {
+  flex-shrink: 0;
   width: 100%;
-  max-width: 480px;
-  padding: 12px 20px calc(var(--safe-bottom) + 30px);
-  box-sizing: border-box;
+  max-width: 440px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   background: #F7F8F8;
-  margin: 0 auto;
+  margin: 6px auto 0;
 }
