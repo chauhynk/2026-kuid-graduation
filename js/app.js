@@ -575,6 +575,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   aboutModal.addEventListener('touchstart', (e) => {
     if (!aboutModal.classList.contains('active')) return;
+    if (e.target.closest('#close-about-modal-top')) return;
     if (e.touches && e.touches.length === 1) {
       touchStartY = e.touches[0].clientY;
       touchStartX = e.touches[0].clientX;
