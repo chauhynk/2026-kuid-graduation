@@ -854,9 +854,9 @@ html, body {
   position: fixed !important;
   top: max(calc(var(--safe-top) + 12px), 16px) !important;
   right: 16px !important;
-  z-index: 1000 !important;
-  width: 38px;
-  height: 38px;
+  z-index: 99999 !important; /* 항상 모든 레이어 최상단에 노출 */
+  width: 44px; /* 터치 표준 규격(44px)으로 터치 미스 방지 */
+  height: 44px;
   border-radius: 0;
   background: #000000 !important;
   border: 1px solid #000000 !important;
@@ -869,6 +869,9 @@ html, body {
   transition: transform 0.15s ease, background-color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
   pointer-events: auto !important;
+  touch-action: manipulation !important; /* 터치 지연 및 제스처 간섭 방지 */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .about-close-circle-btn:active {

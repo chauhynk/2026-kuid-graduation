@@ -505,8 +505,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // 닫기 버튼 전용 터치 & 클릭 바인딩 (모바일 터치 씹힘 / 스크롤 제스처 충돌 완벽 차단)
+  const bindFastTap = (btn, action) => {
+    if (!btn) return;
+    let handled = false;
+
+    // 1. 모바일 touchend: 손가락을 떼는 순간 0ms 즉각 반응
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      handled = true;
+      action();
+      setTimeout(() => { handled = false; }, 350);
+    }, { passive: false });
+
+    // 2. 터치 시작 시 배경 스크롤/제스처 간섭 차단
+    btn.addEventListener('touchstart', (e) => {
+      e.stopPropagation();
+    }, { passive: true });
+
+    // 3. 데스크톱 마우스 클릭 및 포인터 이벤트
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (handled) return;
+      action();
+    });
+  };
+
   // 17. 이벤트 안내 모달 (GUIDE 버튼)
   const openEventModal = () => {
+    const sheet = eventModal.querySelector('.modal-sheet');
+    if (sheet) sheet.scrollTop = 0;
     eventModal.classList.add('active');
   };
   eventInfoBtn.addEventListener('click', openEventModal);
@@ -514,12 +544,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const closeEventModal = () => {
     eventModal.classList.remove('active');
   };
-  if (closeEventModalBtn) {
-    closeEventModalBtn.addEventListener('click', closeEventModal);
-  }
-  if (closeEventModalTopBtn) {
-    closeEventModalTopBtn.addEventListener('click', closeEventModal);
-  }
+  bindFastTap(closeEventModalBtn, closeEventModal);
+  bindFastTap(closeEventModalTopBtn, closeEventModal);
 
   btnGoInstagram.addEventListener('click', () => {
     share.openInstagramAccount();
@@ -562,12 +588,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const closeAboutModal = () => {
     aboutModal.classList.remove('active');
   };
-  if (closeAboutModalBtn) {
-    closeAboutModalBtn.addEventListener('click', closeAboutModal);
-  }
-  if (closeAboutModalTopBtn) {
-    closeAboutModalTopBtn.addEventListener('click', closeAboutModal);
-  }
+  bindFastTap(closeAboutModalBtn, closeAboutModal);
+  bindFastTap(closeAboutModalTopBtn, closeAboutModal);
 
   if (scrollToStatementBtn) {
     scrollToStatementBtn.addEventListener('click', (e) => {
