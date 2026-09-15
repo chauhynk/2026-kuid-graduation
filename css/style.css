@@ -143,19 +143,23 @@ html, body {
 }
 
 .brand-badge {
+  height: 36px;
+  padding: 0 12px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-white);
-  padding: 6px 12px;
   border-radius: 2px;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 1px;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .brand-radar-icon {
@@ -200,13 +204,16 @@ html, body {
 /* 영상 녹화 시간 표시 인디케이터 */
 .record-indicator {
   display: none;
+  height: 36px;
+  padding: 0 12px;
+  box-sizing: border-box;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--kv-red);
-  padding: 6px 12px;
   border-radius: 2px;
   font-size: 11px;
   font-weight: 900;
