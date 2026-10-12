@@ -27,31 +27,34 @@ class FilterRenderer {
     this.targetWidth = this.config.targetWidth || 1080;
     this.targetHeight = this.config.targetHeight || 1920;
 
+    this.container = this.canvas.parentElement || document.body;
     this.initCanvasSize();
     this.preloadFrames();
 
-    window.addEventListener('resize', () => {
-      this.initCanvasSize();
-    });
+    const syncCanvasSize = () => this.initCanvasSize();
+    window.addEventListener('resize', syncCanvasSize);
+    window.visualViewport?.addEventListener('resize', syncCanvasSize);
+    if (window.ResizeObserver) {
+      this.resizeObserver = new ResizeObserver(syncCanvasSize);
+      this.resizeObserver.observe(this.container);
+    }
   }
 
   /**
-   * 캔버스 기본 해상도 초기화 (모바일 기기 프레임에 맞춰 꽉 차도록 비율 최적화)
+   * 실제 표시 영역과 캔버스 해상도의 비율을 항상 일치시킨다.
    */
   initCanvasSize() {
-    const container = this.canvas.parentElement || document.body;
-    const rect = container.getBoundingClientRect();
-    if (rect.width > 0 && rect.height > 0) {
-      const screenRatio = rect.width / rect.height;
-      // 세로형 모바일 화면 (비율 0.75 이하)일 때 기기 종횡비에 1:1로 맞춤
-      if (screenRatio <= 0.75) {
-        this.canvas.width = 1080;
-        this.canvas.height = Math.round(1080 / screenRatio);
-        return;
-      }
+    const rect = this.container.getBoundingClientRect();
+    const width = this.targetWidth;
+    const height = rect.width > 0 && rect.height > 0
+      ? Math.max(1, Math.round(width * rect.height / rect.width))
+      : this.targetHeight;
+
+    // width/height를 다시 지정하면 캔버스 내용이 지워지므로 변경될 때만 갱신한다.
+    if (this.canvas.width !== width || this.canvas.height !== height) {
+      this.canvas.width = width;
+      this.canvas.height = height;
     }
-    this.canvas.width = this.targetWidth;
-    this.canvas.height = this.targetHeight;
   }
 
   /**

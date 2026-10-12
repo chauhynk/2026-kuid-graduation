@@ -8,3 +8,4 @@ Thumbs.db
 # Local server scripts (optional)
 server_bg.ps1
 server_tcp.ps1
+netlify-upload/
