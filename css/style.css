@@ -287,32 +287,27 @@ html, body {
   justify-content: center;
   z-index: 45;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  visibility: hidden;
 }
 
 .timer-overlay.active {
-  opacity: 1;
-}
-
-.timer-box {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 4px dashed #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  animation: rotateRadar 3s linear infinite;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(12px);
+  visibility: visible;
 }
 
 .timer-number {
   font-size: 74px;
   font-weight: 900;
   color: #FFFFFF;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+}
+
+.timer-number.dissolve {
+  animation: timerDissolve 1s ease-out both;
+}
+
+@keyframes timerDissolve {
+  0%, 55% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* ==========================================================================

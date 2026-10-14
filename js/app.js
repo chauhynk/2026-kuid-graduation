@@ -401,13 +401,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (currentTimerSeconds > 0) {
       let count = currentTimerSeconds;
-      timerNumber.textContent = count;
       timerOverlay.classList.add('active');
+
+      const showCountdownNumber = () => {
+        timerNumber.textContent = count;
+        timerNumber.classList.remove('dissolve');
+        void timerNumber.offsetWidth;
+        timerNumber.classList.add('dissolve');
+      };
+      showCountdownNumber();
 
       const timerInterval = setInterval(() => {
         count--;
         if (count > 0) {
-          timerNumber.textContent = count;
+          showCountdownNumber();
         } else {
           clearInterval(timerInterval);
           timerOverlay.classList.remove('active');
