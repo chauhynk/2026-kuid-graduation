@@ -16,10 +16,10 @@ window.APP_CONFIG = {
   // 📋 이벤트 미션: 5가지 STANDBY 상황
   standbyMissions: [
     { id: "a", title: "7층 엘리베이터 기다리며 STANDBY", tag: "MISSION A" },
-    { id: "b", title: "발표 시작 전 STANDBY", tag: "MISSION B" },
-    { id: "c", title: "교수님께 피드백 받기 전 STANDBY", tag: "MISSION C" },
-    { id: "d", title: "배달 시키고 과방에서 STANDBY", tag: "MISSION D" },
-    { id: "e", title: "과제 시작 전 STANDBY", tag: "MISSION E" }
+    { id: "b", title: "교수님께 피드백 받기 전 STANDBY", tag: "MISSION B" },
+    { id: "c", title: "배달 시키고 과실에서 STANDBY", tag: "MISSION C" },
+    { id: "d", title: "과제 시작 전 STANDBY", tag: "MISSION D" },
+    { id: "e", title: "자유롭게 STANDBY", tag: "MISSION E" }
   ],
 
   // 🖼️ 프레임 설정: New_frame_v4 단일 적용 (실시간 날짜/시간 반영)
