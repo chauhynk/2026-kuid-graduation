@@ -202,14 +202,21 @@ class FilterRenderer {
       ctx.fillRect(0, 0, cw, ch);
     }
 
-    // 2. 선택된 PNG/SVG 키비주얼 프레임 오버레이 렌더링
+    // 2. 프레임은 원본 비율을 유지해 화면을 채우고, 넘치는 여백만 중앙에서 자른다.
     const frameImg = this.frameImages.get(this.currentFrameId);
-    if (frameImg && frameImg.complete && frameImg.naturalWidth > 0) {
-      ctx.drawImage(frameImg, 0, 0, cw, ch);
-    }
+    if (frameImg && frameImg.complete && frameImg.naturalWidth > 0 && frameImg.naturalHeight > 0) {
+      const frameScale = Math.max(cw / frameImg.naturalWidth, ch / frameImg.naturalHeight);
+      const frameWidth = frameImg.naturalWidth * frameScale;
+      const frameHeight = frameImg.naturalHeight * frameScale;
 
-    // 3. 우측 실시간 년도/월/일/시간 반영 (YYYY.MM.DD.  HH:mm)
-    this.renderRealtimeTimestamp(ctx, cw, ch);
+      ctx.save();
+      ctx.translate((cw - frameWidth) / 2, (ch - frameHeight) / 2);
+      ctx.drawImage(frameImg, 0, 0, frameWidth, frameHeight);
+
+      // 날짜·시간도 프레임과 같은 좌표와 배율을 사용한다.
+      this.renderRealtimeTimestamp(ctx, frameWidth, frameHeight);
+      ctx.restore();
+    }
 
     ctx.restore();
   }
