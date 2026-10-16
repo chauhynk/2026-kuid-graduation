@@ -22,14 +22,14 @@ window.APP_CONFIG = {
     { id: "e", title: "자유롭게 STANDBY", tag: "MISSION E" }
   ],
 
-  // 🖼️ 프레임 설정: New_frame_v4 단일 적용 (실시간 날짜/시간 반영)
+  // 🖼️ 프레임 설정: 인스타 최종 필터 단일 적용 (실시간 날짜/시간 반영)
   frames: [
     {
-      id: "new_standby_frame_v4",
-      name: "STANDBY V4",
+      id: "standby_final_filter",
+      name: "STANDBY",
       code: "01",
-      src: "assets/frames/New_frame_v4.png",
-      description: "2026 KUID STANDBY OFFICIAL FRAME V4",
+      src: "assets/frames/standby_final_filter.png?v=20261016_1",
+      description: "2026 KUID STANDBY OFFICIAL FRAME",
       colorEffect: "none",
       hasRealtimeTimestamp: true
     }
