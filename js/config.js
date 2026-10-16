@@ -28,7 +28,7 @@ window.APP_CONFIG = {
       id: "standby_final_filter",
       name: "STANDBY",
       code: "01",
-      src: "assets/frames/standby_final_filter.png?v=20261016_1",
+      src: "assets/frames/standby_final_filter.png?v=20261016_v2",
       description: "2026 KUID STANDBY OFFICIAL FRAME",
       colorEffect: "none",
       hasRealtimeTimestamp: true
