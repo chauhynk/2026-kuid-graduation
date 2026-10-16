@@ -143,10 +143,10 @@ class FilterRenderer {
     ctx.save();
     ctx.clearRect(0, 0, cw, ch);
 
-    // 긴 프레임 전체를 스토리에 넣는다. 좌우 여백은 프레임 배경색으로 채운다.
+    // 프레임을 스토리의 가로 폭에 맞춘다. 원본 비율을 유지하고 위아래 여백만 중앙에서 자른다.
     const frameImg = this.frameImages.get(this.currentFrameId);
     const hasFrame = frameImg && frameImg.complete && frameImg.naturalWidth > 0 && frameImg.naturalHeight > 0;
-    const frameScale = hasFrame ? Math.min(cw / frameImg.naturalWidth, ch / frameImg.naturalHeight) : 1;
+    const frameScale = hasFrame ? cw / frameImg.naturalWidth : 1;
     const frameWidth = hasFrame ? frameImg.naturalWidth * frameScale : cw;
     const frameHeight = hasFrame ? frameImg.naturalHeight * frameScale : ch;
     ctx.fillStyle = '#D9D9D9';
@@ -200,7 +200,7 @@ class FilterRenderer {
       ctx.fillRect(0, 0, frameWidth, frameHeight);
     }
 
-    // 2. 카메라와 동일한 좌표에 프레임 전체를 그려 미리보기와 저장 구도를 일치시킨다.
+    // 2. 카메라와 동일한 좌표에 프레임을 그려 미리보기와 저장 구도를 일치시킨다.
     if (hasFrame) {
       ctx.drawImage(frameImg, 0, 0, frameWidth, frameHeight);
 
