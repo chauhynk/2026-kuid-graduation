@@ -27,28 +27,16 @@ class FilterRenderer {
     this.targetWidth = this.config.targetWidth || 1080;
     this.targetHeight = this.config.targetHeight || 1920;
 
-    this.container = this.canvas.parentElement || document.body;
     this.initCanvasSize();
     this.preloadFrames();
-
-    const syncCanvasSize = () => this.initCanvasSize();
-    window.addEventListener('resize', syncCanvasSize);
-    window.visualViewport?.addEventListener('resize', syncCanvasSize);
-    if (window.ResizeObserver) {
-      this.resizeObserver = new ResizeObserver(syncCanvasSize);
-      this.resizeObserver.observe(this.container);
-    }
   }
 
   /**
-   * 실제 표시 영역과 캔버스 해상도의 비율을 항상 일치시킨다.
+   * 촬영·저장·공유는 고정된 스토리 비율을 사용한다. 화면 크기는 CSS에서 맞춘다.
    */
   initCanvasSize() {
-    const rect = this.container.getBoundingClientRect();
     const width = this.targetWidth;
-    const height = rect.width > 0 && rect.height > 0
-      ? Math.max(1, Math.round(width * rect.height / rect.width))
-      : this.targetHeight;
+    const height = this.targetHeight;
 
     // width/height를 다시 지정하면 캔버스 내용이 지워지므로 변경될 때만 갱신한다.
     if (this.canvas.width !== width || this.canvas.height !== height) {
@@ -155,6 +143,16 @@ class FilterRenderer {
     ctx.save();
     ctx.clearRect(0, 0, cw, ch);
 
+    // 긴 프레임 전체를 스토리에 넣는다. 좌우 여백은 프레임 배경색으로 채운다.
+    const frameImg = this.frameImages.get(this.currentFrameId);
+    const hasFrame = frameImg && frameImg.complete && frameImg.naturalWidth > 0 && frameImg.naturalHeight > 0;
+    const frameScale = hasFrame ? Math.min(cw / frameImg.naturalWidth, ch / frameImg.naturalHeight) : 1;
+    const frameWidth = hasFrame ? frameImg.naturalWidth * frameScale : cw;
+    const frameHeight = hasFrame ? frameImg.naturalHeight * frameScale : ch;
+    ctx.fillStyle = '#D9D9D9';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.translate((cw - frameWidth) / 2, (ch - frameHeight) / 2);
+
     // 1. 소스 (카메라 비디오 또는 업로드된 이미지) 그리기
     const source = this.customUploadedImage || this.video;
     const hasSource = this.customUploadedImage 
@@ -166,7 +164,7 @@ class FilterRenderer {
       const srcHeight = this.customUploadedImage ? source.naturalHeight || source.height : source.videoHeight;
 
       // Center-crop (Cover) 계산
-      const canvasRatio = cw / ch;
+      const canvasRatio = frameWidth / frameHeight;
       const srcRatio = srcWidth / srcHeight;
       let drawW, drawH, sx, sy;
 
@@ -186,7 +184,7 @@ class FilterRenderer {
 
       // 전면 카메라일 경우 좌우 미러링
       if (!this.customUploadedImage && this.isFrontCamera) {
-        ctx.translate(cw, 0);
+        ctx.translate(frameWidth, 0);
         ctx.scale(-1, 1);
       }
 
@@ -195,27 +193,19 @@ class FilterRenderer {
         ctx.filter = this.currentColorFilter;
       }
 
-      ctx.drawImage(source, sx, sy, drawW, drawH, 0, 0, cw, ch);
+      ctx.drawImage(source, sx, sy, drawW, drawH, 0, 0, frameWidth, frameHeight);
       ctx.restore();
     } else {
       ctx.fillStyle = '#050507';
-      ctx.fillRect(0, 0, cw, ch);
+      ctx.fillRect(0, 0, frameWidth, frameHeight);
     }
 
-    // 2. 프레임은 원본 비율을 유지해 화면을 채우고, 넘치는 여백만 중앙에서 자른다.
-    const frameImg = this.frameImages.get(this.currentFrameId);
-    if (frameImg && frameImg.complete && frameImg.naturalWidth > 0 && frameImg.naturalHeight > 0) {
-      const frameScale = Math.max(cw / frameImg.naturalWidth, ch / frameImg.naturalHeight);
-      const frameWidth = frameImg.naturalWidth * frameScale;
-      const frameHeight = frameImg.naturalHeight * frameScale;
-
-      ctx.save();
-      ctx.translate((cw - frameWidth) / 2, (ch - frameHeight) / 2);
+    // 2. 카메라와 동일한 좌표에 프레임 전체를 그려 미리보기와 저장 구도를 일치시킨다.
+    if (hasFrame) {
       ctx.drawImage(frameImg, 0, 0, frameWidth, frameHeight);
 
       // 날짜·시간도 프레임과 같은 좌표와 배율을 사용한다.
       this.renderRealtimeTimestamp(ctx, frameWidth, frameHeight);
-      ctx.restore();
     }
 
     ctx.restore();

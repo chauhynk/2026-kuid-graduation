@@ -89,7 +89,7 @@ html, body {
   position: absolute;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 화면 크기가 바뀌는 동안에도 카메라 영상을 찌그러뜨리지 않음 */
+  object-fit: contain; /* 저장되는 9:16 구도 전체를 화면 높이와 관계없이 표시 */
 }
 
 .flash-effect {
