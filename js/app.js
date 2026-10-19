@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const resultTitle = document.getElementById('result-title');
   const previewImg = document.getElementById('preview-img');
   const previewVideo = document.getElementById('preview-video');
+  const imageSaveHelp = document.getElementById('image-save-help');
   const btnShareStory = document.getElementById('btn-share-story');
   const btnShareText = document.getElementById('btn-share-text');
   const btnDownload = document.getElementById('btn-download');
@@ -67,7 +68,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let lastResultType = 'photo'; // 'photo' or 'video'
   let lastCapturedBlob = null;
-  let lastCapturedDataUrl = null;
   let lastRecordedBlob = null;
   let lastRecordedUrl = null;
   let lastRecordedExt = 'mp4';
@@ -301,9 +301,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { blob, dataUrl } = await renderer.captureSnapshot();
     lastResultType = 'photo';
     lastCapturedBlob = blob;
-    lastCapturedDataUrl = dataUrl;
 
     // 모달 표시
+    imageSaveHelp.hidden = true;
     previewImg.src = dataUrl;
     previewImg.style.display = 'block';
     previewVideo.style.display = 'none';
@@ -372,6 +372,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     lastRecordedMime = res.mimeType;
 
     // 모달에 비디오 로드
+    imageSaveHelp.hidden = true;
     previewImg.style.display = 'none';
     previewVideo.style.display = 'block';
     previewVideo.src = res.videoUrl;
@@ -454,31 +455,58 @@ document.addEventListener('DOMContentLoaded', async () => {
   shutterBtn.addEventListener('pointercancel', handlePointerUp);
 
   // 16. 결과 모달 공유 & 다운로드 버튼
+  const showImageSaveHelp = () => {
+    imageSaveHelp.textContent = '아래 사진을 길게 눌러 “이미지 저장” 또는 “사진에 저장”을 선택해 주세요.\n메뉴가 없으면 인스타그램 ⋯ → 외부 브라우저에서 다시 촬영해 주세요.';
+    imageSaveHelp.hidden = false;
+    imageSaveHelp.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+
+  const handleImageAction = (res) => {
+    if (res.aborted) {
+      imageSaveHelp.hidden = true;
+    } else if (res.method === 'preview') {
+      showImageSaveHelp();
+    } else if (res.method === 'download') {
+      imageSaveHelp.hidden = true;
+      showToast('다운로드를 요청했습니다. 브라우저 다운로드 목록을 확인해 주세요.');
+    }
+  };
+
   btnShareStory.addEventListener('click', async () => {
     if (lastResultType === 'photo' && lastCapturedBlob) {
-      const res = await share.shareImage(lastCapturedBlob, `kuid_standby_${Date.now()}.jpg`);
-      if (res.method === 'web-share') {
-        showToast('STORY SHARE SHEET OPENED');
-      } else if (res.method === 'download') {
-        showToast('IMAGE SAVED TO DEVICE');
+      try {
+        const res = await share.shareImage(lastCapturedBlob, `kuid_standby_${Date.now()}.jpg`);
+        handleImageAction(res);
+      } catch (err) {
+        showImageSaveHelp();
       }
     } else if (lastResultType === 'video' && lastRecordedBlob) {
       const res = await share.shareVideo(lastRecordedBlob, `kuid_standby_${Date.now()}.${lastRecordedExt}`, lastRecordedMime);
       if (res.method === 'web-share') {
         showToast('STORY SHARE SHEET OPENED');
       } else if (res.method === 'download') {
-        showToast('VIDEO SAVED TO DEVICE');
+        showToast('VIDEO DOWNLOAD REQUESTED');
       }
     }
   });
 
-  btnDownload.addEventListener('click', () => {
-    if (lastResultType === 'photo' && lastCapturedDataUrl) {
-      share.downloadImage(lastCapturedDataUrl, `kuid_standby_${Date.now()}.jpg`);
-      showToast('IMAGE SAVED TO DEVICE');
+  btnDownload.addEventListener('click', async () => {
+    if (lastResultType === 'photo' && lastCapturedBlob) {
+      if (btnDownload.disabled) return;
+      btnDownload.disabled = true;
+      imageSaveHelp.textContent = '공유 메뉴에서 “이미지 저장”을 선택해 주세요. 저장 항목이 없으면 아래 사진을 길게 눌러 저장할 수도 있습니다.';
+      imageSaveHelp.hidden = false;
+      try {
+        const res = await share.saveImage(lastCapturedBlob, `kuid_standby_${Date.now()}.jpg`);
+        handleImageAction(res);
+      } catch (err) {
+        showImageSaveHelp();
+      } finally {
+        btnDownload.disabled = false;
+      }
     } else if (lastResultType === 'video' && lastRecordedBlob) {
       share.downloadVideo(lastRecordedBlob, `kuid_standby_${Date.now()}.${lastRecordedExt}`);
-      showToast('VIDEO SAVED TO DEVICE');
+      showToast('VIDEO DOWNLOAD REQUESTED');
     }
   });
 

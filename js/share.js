@@ -6,6 +6,42 @@ class ShareManager {
     this.config = config || window.APP_CONFIG;
   }
 
+  canShareFile(file) {
+    try {
+      return typeof navigator.share === 'function' &&
+        typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] });
+    } catch (err) {
+      return false;
+    }
+  }
+
+  /** 모바일 앱 브라우저는 다운로드 링크를 무시할 수 있어 사진 길게 누르기를 안내한다. */
+  imageFallback(blob, filename, preferPreview = false) {
+    const mobile = /Android|iPhone|iPad|iPod|Instagram|FBAN|FBAV|KAKAOTALK/i.test(navigator.userAgent || '') ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (mobile || preferPreview) return { success: false, method: 'preview' };
+    this.downloadImage(blob, filename);
+    return { success: false, method: 'download' }; // 다운로드 요청이며 완료 여부는 브라우저만 알 수 있다.
+  }
+
+  /** 파일만 전달해 휴대폰 공유 메뉴의 이미지 저장 기능을 사용한다. */
+  async saveImage(blob, filename = 'kuid_standby_capture.jpg') {
+    if (!blob) throw new Error('저장할 이미지가 없습니다.');
+    const file = new File([blob], filename, { type: 'image/jpeg' });
+    if (this.canShareFile(file)) {
+      try {
+        // 사용자 클릭 직후 실행해야 하므로 파일 변환 등 비동기 작업을 앞에 두지 않는다.
+        await navigator.share({ files: [file] });
+        return { success: true, method: 'web-share' };
+      } catch (err) {
+        if (err.name === 'AbortError') return { success: false, aborted: true };
+        console.warn('이미지 저장 메뉴를 열지 못했습니다:', err);
+        return this.imageFallback(blob, filename, true);
+      }
+    }
+    return this.imageFallback(blob, filename);
+  }
+
   /**
    * 인스타그램 스토리 또는 모바일 시스템 공유창 띄우기 (사진)
    */
@@ -17,7 +53,7 @@ class ShareManager {
     const file = new File([blob], filename, { type: 'image/jpeg' });
 
     // Web Share API 및 파일 공유 지원 여부 확인
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    if (this.canShareFile(file)) {
       try {
         await navigator.share({
           files: [file],
@@ -29,13 +65,12 @@ class ShareManager {
         if (err.name === 'AbortError') {
           return { success: false, aborted: true };
         }
-        console.warn('Web Share 실패, 다운로드로 대체:', err);
+        console.warn('Web Share 실패, 이미지 저장 안내로 대체:', err);
+        return this.imageFallback(blob, filename, true);
       }
     }
 
-    // 미지원 브라우저인 경우 일반 파일 다운로드 실행
-    this.downloadImage(blob, filename);
-    return { success: true, method: 'download' };
+    return this.imageFallback(blob, filename);
   }
 
   /**

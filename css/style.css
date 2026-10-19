@@ -552,7 +552,7 @@ html, body {
 
 .preview-container {
   width: 100%;
-  max-height: 48vh;
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -566,6 +566,22 @@ html, body {
   max-width: 100%;
   max-height: 48vh;
   object-fit: contain;
+}
+
+/* 촬영한 원본 JPEG를 길게 눌러 시스템 이미지 저장 메뉴를 사용할 수 있게 한다. */
+#preview-img {
+  -webkit-touch-callout: default;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.image-save-help {
+  background: #FFFFFF;
+  border: 1px solid #000000;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-line;
 }
 
 .hashtag-box {
